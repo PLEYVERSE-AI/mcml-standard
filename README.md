@@ -1,2 +1,2 @@
-# MLML
-MLML schema, spec, examples
+# MCML
+MCML schema, spec, examples
