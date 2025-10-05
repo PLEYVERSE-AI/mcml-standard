@@ -1033,32 +1033,32 @@ print(action_check)
 
 ## Documentation
 
-📖 **[Complete Specification](https://mcml.ai/spec/v1.0)**
+📖 **[Complete Specification](https://mcml-standard.org/spec/v1.0)**
 
 ### Core Documentation
-- [MCML Standard Overview](https://mcml.ai/)
-- [Card Schema Specifications](https://mcml.ai/schemas/)
-- [Compliance Framework Mappings](https://mcml.ai/compliance/)
-- [Machine-Readable Protocol](https://mcml.ai/protocol/)
+- [MCML Standard Overview](https://mcml-standard.org/)
+- [Card Schema Specifications](https://mcml-standard.org/schemas/)
+- [Compliance Framework Mappings](https://mcml-standard.org/compliance/)
+- [Machine-Readable Protocol](https://mcml-standard.org/protocol/)
 
 ### Implementation Guides
-- [Reference Implementation (Two-Layer Architecture)](https://mcml.ai/reference-implementation/)
-- [PostgreSQL Setup Guide](https://mcml.ai/guides/postgresql/)
-- [Alternative Implementations](https://mcml.ai/guides/alternatives/)
-- [MLflow Integration](https://mcml.ai/integrations/mlflow/)
-- [CI/CD Integration](https://mcml.ai/integrations/cicd/)
+- [Reference Implementation (Two-Layer Architecture)](https://mcml-standard.org/reference-implementation/)
+- [PostgreSQL Setup Guide](https://mcml-standard.org/guides/postgresql/)
+- [Alternative Implementations](https://mcml-standard.org/guides/alternatives/)
+- [MLflow Integration](https://mcml-standard.org/integrations/mlflow/)
+- [CI/CD Integration](https://mcml-standard.org/integrations/cicd/)
 
 ### Compliance Guides
-- [NIST AI RMF Compliance](https://mcml.ai/compliance/nist-rmf/)
-- [EU AI Act Compliance](https://mcml.ai/compliance/eu-ai-act/)
-- [ISO/IEC 42001 Compliance](https://mcml.ai/compliance/iso-42001/)
-- [GDPR Compliance](https://mcml.ai/compliance/gdpr/)
-- [FDA Medical Device Compliance](https://mcml.ai/compliance/fda/)
+- [NIST AI RMF Compliance](https://mcml-standard.org/compliance/nist-rmf/)
+- [EU AI Act Compliance](https://mcml-standard.org/compliance/eu-ai-act/)
+- [ISO/IEC 42001 Compliance](https://mcml-standard.org/compliance/iso-42001/)
+- [GDPR Compliance](https://mcml-standard.org/compliance/gdpr/)
+- [FDA Medical Device Compliance](https://mcml-standard.org/compliance/fda/)
 
 ### API Reference
-- [Python SDK](https://mcml.ai/sdk/python/)
-- [REST API](https://mcml.ai/api/rest/)
-- [CLI Tools](https://mcml.ai/cli/)
+- [Python SDK](https://mcml-standard.org/sdk/python/)
+- [REST API](https://mcml-standard.org/api/rest/)
+- [CLI Tools](https://mcml-standard.org/cli/)
 
 ---
 
@@ -1066,24 +1066,24 @@ print(action_check)
 
 ### MCML v1.0 Schemas (JSON Schema)
 
-- **[Model Card Schema](https://mcml.ai/schemas/v1.0/model-card.schema.json)** — Machine-readable Model Card specification
-- **[Dataset Card Schema](https://mcml.ai/schemas/v1.0/dataset-card.schema.json)** — Machine-readable Dataset Card specification  
-- **[Interface Card Schema](https://mcml.ai/schemas/v1.0/interface-card.schema.json)** — Machine-readable Interface Card specification
-- **[Agentic Card Schema](https://mcml.ai/schemas/v1.0/agentic-card.schema.json)** — Machine-readable Agentic Card specification
+- **[Model Card Schema](https://mcml-standard.org/schemas/v1.0/model-card.schema.json)** — Machine-readable Model Card specification
+- **[Dataset Card Schema](https://mcml-standard.org/schemas/v1.0/dataset-card.schema.json)** — Machine-readable Dataset Card specification  
+- **[Interface Card Schema](https://mcml-standard.org/schemas/v1.0/interface-card.schema.json)** — Machine-readable Interface Card specification
+- **[Agentic Card Schema](https://mcml-standard.org/schemas/v1.0/agentic-card.schema.json)** — Machine-readable Agentic Card specification
 
 ### Example Cards
 
-- **[Model Card Example (YAML)](https://mcml.ai/examples/model-card.yaml)**
-- **[Dataset Card Example (YAML)](https://mcml.ai/examples/dataset-card.yaml)**
-- **[Interface Card Example (YAML)](https://mcml.ai/examples/interface-card.yaml)**
-- **[Agentic Card Example (YAML)](https://mcml.ai/examples/agentic-card.yaml)**
-- **[Complete Governance Stack](https://mcml.ai/examples/complete-stack/)**
+- **[Model Card Example (YAML)](https://mcml-standard.org/examples/model-card.yaml)**
+- **[Dataset Card Example (YAML)](https://mcml-standard.org/examples/dataset-card.yaml)**
+- **[Interface Card Example (YAML)](https://mcml-standard.org/examples/interface-card.yaml)**
+- **[Agentic Card Example (YAML)](https://mcml-standard.org/examples/agentic-card.yaml)**
+- **[Complete Governance Stack](https://mcml-standard.org/examples/complete-stack/)**
 
 ### Compliance Templates
 
-- **[NIST AI RMF Template](https://mcml.ai/templates/nist-rmf/)**
-- **[EU AI Act Template](https://mcml.ai/templates/eu-ai-act/)**
-- **[ISO 42001 Template](https://mcml.ai/templates/iso-42001/)**
+- **[NIST AI RMF Template](https://mcml-standard.org/templates/nist-rmf/)**
+- **[EU AI Act Template](https://mcml-standard.org/templates/eu-ai-act/)**
+- **[ISO 42001 Template](https://mcml-standard.org/templates/iso-42001/)**
 
 ---
 
@@ -1323,25 +1323,25 @@ The two-layer architecture with foreign key relationships for AI governance is p
 ## Contact and Support
 
 ### General Inquiries
-- 📧 **Email**: [info@mcml.ai](mailto:info@mcml.ai)
-- 🌐 **Website**: [https://mcml.ai](https://mcml.ai)
+- 📧 **Email**: [info@mcml-standard.org](mailto:info@mcml-standard.org)
+- 🌐 **Website**: [https://mcml-standard.org](https://mcml-standard.org)
 
 ### Technical Support
-- 💬 **GitHub Discussions**: [github.com/mcml-standard/mcml/discussions](https://github.com/mcml-standard/mcml/discussions)
-- 🐛 **Bug Reports**: [github.com/mcml-standard/mcml/issues](https://github.com/mcml-standard/mcml/issues)
-- 📚 **Documentation**: [https://mcml.ai/docs](https://mcml.ai/docs)
+- 💬 **GitHub Discussions**: [github.com/mcml-standard.org/mcml/discussions](https://github.com/mcml-standard.org/mcml/discussions)
+- 🐛 **Bug Reports**: [github.com/mcml-standard.org/mcml/issues](https://github.com/mcml-standard.org/mcml/issues)
+- 📚 **Documentation**: [https://mcml-standard.org/docs](https://mcml-standard.org/docs)
 
 ### Standards Working Group
-- 📝 **Proposals**: [github.com/mcml-standard/proposals](https://github.com/mcml-standard/proposals)
-- 📅 **Meeting Schedule**: Monthly public calls (see [mcml.ai/meetings](https://mcml.ai/meetings))
-- 👥 **Join the Working Group**: [mcml.ai/join](https://mcml.ai/join)
+- 📝 **Proposals**: [github.com/mcml-standard.org/proposals](https://github.com/mcml-standard.org/proposals)
+- 📅 **Meeting Schedule**: Monthly public calls (see [mcml-standard.org/meetings](https://mcml-standard.org/meetings))
+- 👥 **Join the Working Group**: [mcml-standard.org/join](https://mcml-standard.org/join)
 
 ### Commercial Licensing (Reference Implementation)
-- 💼 **Licensing**: [licensing@mcml.ai](mailto:licensing@mcml.ai)
-- 🤝 **Enterprise Support**: [enterprise@mcml.ai](mailto:enterprise@mcml.ai)
+- 💼 **Licensing**: [licensing@mcml-standard.org](mailto:licensing@mcml-standard.org)
+- 🤝 **Enterprise Support**: [enterprise@mcml-standard.org](mailto:enterprise@mcml-standard.org)
 
 ### Social Media
-- 🐦 **Twitter/X**: [@mcml_standard](https://twitter.com/mcml_standard)
+- 🐦 **Twitter/X**: [@mcml-standard.org](https://twitter.com/mcml-standard)
 - 💼 **LinkedIn**: [MCML Standard](https://linkedin.com/company/mcml-standard)
 - 📺 **YouTube**: [MCML Tutorials](https://youtube.com/@mcml-standard)
 
