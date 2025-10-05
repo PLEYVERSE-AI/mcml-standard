@@ -3,7 +3,7 @@
 **Machine-Readable Card Markup Language for AI Governance**
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Specification](https://img.shields.io/badge/spec-v1.0-blue)](https://mcml.ai/spec/v1.0)
+[![Specification](https://img.shields.io/badge/spec-v1.0-blue)](https://mcml-standard.org/spec/v1.0)
 [![Status](https://img.shields.io/badge/status-draft-orange)]()
 
 > **A unified standard for AI governance documentation — making compliance automatable**
