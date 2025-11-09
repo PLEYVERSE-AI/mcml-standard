@@ -1327,7 +1327,7 @@ The two-layer architecture with foreign key relationships for AI governance is p
 - 🌐 **Website**: [https://mcml-standard.org](https://mcml-standard.org)
 
 ### Technical Support
-- 💬 **GitHub Discussions**: [github.com/mcml-standard.org/mcml/discussions](https://github.com/mcml-standard.org/mcml/discussions)
+- 💬 **GitHub Discussions**: [github.com/mcml-standard.org/mcml/discussions](https://github.com/mcml-standard.org/mcml/discussions](https://github.com/PLEYVERSE-AI/mcml-standard)
 - 🐛 **Bug Reports**: [github.com/mcml-standard.org/mcml/issues](https://github.com/mcml-standard.org/mcml/issues)
 - 📚 **Documentation**: [https://mcml-standard.org/docs](https://mcml-standard.org/docs)
 
