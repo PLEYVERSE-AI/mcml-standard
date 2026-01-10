@@ -1136,7 +1136,7 @@ Organizations using MCML in production:
 
 ## Roadmap
 
-### Current: v1.0 (January 2025)
+### Current: v1.0 (January 2026)
 
 ✅ **Core Specification**
 - Four Card types formalized (Model, Dataset, Interface, Agentic)
@@ -1156,7 +1156,7 @@ Organizations using MCML in production:
 - Python SDK
 - CLI tools
 
-### Planned: v1.1 (Q2 2025)
+### Planned: v1.1 (Q2 2026)
 
 🔲 **Enhanced Compliance**
 - Detailed GDPR mapping (all Articles)
@@ -1180,7 +1180,7 @@ Organizations using MCML in production:
 - Automated Card generation from code
 - Diff tools for Card versioning
 
-### Future Exploration (2025-2026)
+### Future Exploration (2026-2027)
 
 🔮 **Federated Learning Governance**
 - Multi-party Model Cards
