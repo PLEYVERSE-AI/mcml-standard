@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcml-standard.org/schemas/v1.1/dataset-card.schema.json",
+  "title": "MCML Dataset Card",
+  "description": "Governance metadata for a training or evaluation dataset (MCML v1.1 draft). Extends Datasheets for Datasets (Gebru et al., 2018).",
+  "type": "object",
+  "required": ["dataset_card"],
+  "properties": {
+    "dataset_card": {
+      "type": "object",
+      "required": ["dataset_name", "version", "collection_method", "data_owner", "contains_pii"],
+      "properties": {
+        "dataset_name": {"type": "string", "minLength": 1},
+        "version": {"type": ["string", "number"]},
+        "collection_method": {"type": "string", "minLength": 1},
+        "collection_date_start": {"type": "string"},
+        "collection_date_end": {"type": "string"},
+        "data_owner": {"type": "string", "minLength": 1},
+        "known_biases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["bias_type", "description"],
+            "properties": {
+              "bias_type": {"type": "string"},
+              "description": {"type": "string"},
+              "impact": {"type": "string"},
+              "mitigation": {"type": "string"}
+            }
+          }
+        },
+        "quality_metrics": {"type": "object", "additionalProperties": {"type": "number"}},
+        "preprocessing_steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["step"],
+            "properties": {"step": {"type": "string"}, "description": {"type": "string"}}
+          }
+        },
+        "contains_pii": {"type": "boolean"},
+        "pii_fields": {"type": "array", "items": {"type": "string"}},
+        "legal_basis": {"type": "string"},
+        "retention_policy": {"type": "string"},
+        "gdpr_compliance": {
+          "type": "object",
+          "properties": {
+            "lawful_basis": {"type": "string"},
+            "data_minimization": {"type": "string"},
+            "purpose_limitation": {"type": "string"},
+            "subject_rights": {"type": "string"}
+          }
+        }
+      },
+      "if": {"properties": {"contains_pii": {"const": true}}},
+      "then": {"required": ["pii_fields", "legal_basis", "retention_policy"]}
+    }
+  }
+}

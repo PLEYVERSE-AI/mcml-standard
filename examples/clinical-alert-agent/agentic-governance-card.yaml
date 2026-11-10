@@ -1,0 +1,69 @@
+# Synthetic example: an agent that may send a clinical alert only after human approval.
+# This is the workflow used to test runtime enforcement (approval withdrawal,
+# kill switch, gateway bypass).
+agentic_governance_card:
+  schema_version: "1.1"
+  agent_name: clinical_alert_agent
+  agent_version: "0.1.0"
+  description: "Drafts deterioration alerts and sends them only after charge-nurse approval"
+  model_ref: "model://deterioration_risk_model/1.0.0"
+
+  identity:
+    agent_id: "agent://clinical/alert/0.1.0"
+    authentication: "Workload identity issued per deployment; credentials held by the gateway, not the agent"
+    credential_rotation: "Per session; revocable immediately"
+    owner: "Clinical AI Governance Committee"
+
+  autonomy:
+    level: assistive
+    decision_authority:
+      may_send_alert_without_approval: false
+      max_alerts_per_patient_per_hour: 2
+
+  authorization:
+    tools:
+      - name: read_vitals
+        scopes: ["vitals:read"]
+        permission_ttl: "PT15M"
+      - name: page_rapid_response
+        scopes: ["paging:send"]
+        requires_human_approval: true
+        max_calls_per_application: 1
+        permission_ttl: "PT5M"
+    standing_access: none
+    forbidden_actions:
+      - send_alert_without_approval
+      - modify_patient_record
+      - call_tools_outside_gateway
+
+  enforcement:
+    policy_engine: "MCP tool gateway (outside the agent runtime)"
+    enforcement_point: "Gateway, before each MCP tool call is forwarded"
+    violation_behavior: "Block call, log event, notify charge nurse"
+    audit_log:
+      captures: [agent_version, card_version, origin_user, tool, arguments_hash, approval_id, decision, tool_receipt, timestamp]
+      retention_days: 2555
+      tamper_evident: true
+
+  kill_switch:
+    trigger_conditions:
+      - "approval withdrawn for a pending alert"
+      - "alerts_per_hour > 10"
+      - "any call to page_rapid_response without a valid approval_id"
+    action: "Revoke agent credentials at the gateway, drop open tool sessions, route to manual workflow"
+    tested: "2026-11-05"          # illustrative value
+    tested_by: "Example SRE team"  # illustrative value
+
+  human_oversight:
+    model_card_ref: "model://deterioration_risk_model/1.0.0#human_oversight"
+    escalation_rules:
+      - {condition: "alert drafted", action: request_charge_nurse_approval, sla: "5 minutes"}
+      - {condition: "no approval within SLA", action: escalate_to_house_supervisor, sla: "10 minutes"}
+
+  monitoring:
+    action_logging_level: all
+
+  threat_coverage:
+    framework: "OWASP Top 10 for Agentic Applications"
+    reviewed_categories: ["Tool misuse", "Identity and privilege abuse"]
+    last_reviewed: "2026-11-01"

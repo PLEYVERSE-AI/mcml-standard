@@ -1,0 +1,15 @@
+# Synthetic example.
+interface_card:
+  service_name: rapid_response_paging_tool
+  description: "MCP tool that pages the rapid response team"
+  model_ref: "model://deterioration_risk_model/1.0.0"
+  supported_protocols: [MCP]
+  authentication_method: "OAuth 2.1 (MCP authorization)"
+  access_control_policy:
+    authorized_roles: [clinical_alert_agent]
+  rate_limits:
+    requests_per_hour: 30
+  data_classification: restricted
+  logging_level: detailed
+  log_retention_days: 2555
+  service_owner: "Clinical Systems Integration"

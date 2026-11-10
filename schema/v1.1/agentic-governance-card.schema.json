@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcml-standard.org/schemas/v1.1/agentic-governance-card.schema.json",
+  "title": "MCML Agentic Governance Card",
+  "description": "Governance metadata for an AI agent or autonomous component (MCML v1.1 draft): identity, scoped authorization, delegation, runtime enforcement, kill switch and human oversight. Replaces the v1.0 agentic_card.",
+  "type": "object",
+  "required": ["agentic_governance_card"],
+  "properties": {
+    "agentic_governance_card": {
+      "type": "object",
+      "required": [
+        "schema_version", "agent_name", "agent_version", "identity", "autonomy",
+        "authorization", "enforcement", "kill_switch", "human_oversight"
+      ],
+      "properties": {
+        "schema_version": {"const": "1.1"},
+        "agent_name": {"type": "string", "minLength": 1},
+        "agent_version": {"type": "string", "minLength": 1},
+        "description": {"type": "string"},
+        "last_verified": {"type": "string"},
+        "model_ref": {"type": "string", "pattern": "^model://"},
+        "identity": {
+          "type": "object",
+          "required": ["agent_id", "owner"],
+          "properties": {
+            "agent_id": {"type": "string", "pattern": "^agent://"},
+            "authentication": {"type": "string"},
+            "credential_rotation": {"type": "string"},
+            "owner": {"type": "string", "minLength": 1}
+          }
+        },
+        "autonomy": {
+          "type": "object",
+          "required": ["level"],
+          "properties": {
+            "level": {"enum": ["assistive", "semi_autonomous", "autonomous"]},
+            "decision_authority": {"type": "object", "additionalProperties": {"type": ["number", "string", "boolean"]}}
+          }
+        },
+        "authorization": {
+          "type": "object",
+          "required": ["tools", "forbidden_actions"],
+          "properties": {
+            "tools": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["name", "scopes"],
+                "properties": {
+                  "name": {"type": "string"},
+                  "scopes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+                  "max_calls_per_application": {"type": "integer", "minimum": 0},
+                  "permission_ttl": {"type": "string", "pattern": "^P"},
+                  "requires_human_approval": {"type": "boolean"}
+                }
+              }
+            },
+            "standing_access": {"enum": ["none", "limited", "full"]},
+            "forbidden_actions": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "delegation": {
+          "type": "object",
+          "properties": {
+            "max_hops": {"type": "integer", "minimum": 0},
+            "requires_origin_user": {"type": "boolean"},
+            "chain_recorded": {"type": "boolean"},
+            "permitted_downstream_agents": {"type": "array", "items": {"type": "string"}},
+            "prohibited_downstream_agents": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "interoperability": {
+          "type": "object",
+          "properties": {
+            "mcp": {"$ref": "#/$defs/protocol"},
+            "a2a": {"$ref": "#/$defs/protocol"},
+            "upstream_spec_links": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "enforcement": {
+          "type": "object",
+          "required": ["enforcement_point", "violation_behavior", "audit_log"],
+          "properties": {
+            "policy_engine": {"type": "string"},
+            "enforcement_point": {"type": "string", "minLength": 1},
+            "violation_behavior": {"type": "string", "minLength": 1},
+            "audit_log": {
+              "type": "object",
+              "required": ["captures", "tamper_evident"],
+              "properties": {
+                "captures": {"type": "array", "items": {"type": "string"}},
+                "retention_days": {"type": "integer", "minimum": 0},
+                "tamper_evident": {"type": "boolean"}
+              }
+            }
+          }
+        },
+        "kill_switch": {
+          "type": "object",
+          "required": ["trigger_conditions", "action"],
+          "properties": {
+            "trigger_conditions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+            "action": {"type": "string", "minLength": 1},
+            "tested": {"type": "string"},
+            "tested_by": {"type": "string"},
+            "rollback_procedure_ref": {"type": "string"}
+          }
+        },
+        "human_oversight": {
+          "type": "object",
+          "required": ["escalation_rules"],
+          "properties": {
+            "model_card_ref": {"type": "string"},
+            "escalation_rules": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["condition", "action"],
+                "properties": {
+                  "condition": {"type": "string"},
+                  "action": {"type": "string"},
+                  "sla": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "monitoring": {
+          "type": "object",
+          "properties": {
+            "model_card_ref": {"type": "string"},
+            "action_logging_level": {"enum": ["none", "errors", "decisions", "all"]}
+          }
+        },
+        "threat_coverage": {
+          "type": "object",
+          "properties": {
+            "framework": {"type": "string"},
+            "reviewed_categories": {"type": "array", "items": {"type": "string"}},
+            "last_reviewed": {"type": "string"}
+          }
+        },
+        "incident_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "$defs": {
+    "protocol": {
+      "type": "object",
+      "properties": {
+        "supported": {"type": "boolean"},
+        "spec_version_range": {"type": "string"},
+        "auth_profile": {"type": "string"},
+        "agent_card_signed": {"type": "boolean"}
+      }
+    }
+  }
+}

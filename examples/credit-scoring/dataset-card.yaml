@@ -1,0 +1,28 @@
+dataset_card:
+  dataset_name: customer_credit_data
+  version: "2.3"
+
+  collection_method: "Production credit applications 2023-2024 + synthetic augmentation"
+  collection_date_start: "2023-01-01"
+  collection_date_end: "2024-12-31"
+  data_owner: "Data Governance Office"
+
+  known_biases:
+    - bias_type: geographic
+      description: "Urban areas over-represented (65% vs 45% national population)"
+      impact: "May underperform for rural applicants"
+      mitigation: "Synthetic rural data augmentation + stratified validation"
+
+  quality_metrics:
+    completeness: 0.94
+    consistency_score: 0.89
+    missing_value_rate: 0.06
+
+  preprocessing_steps:
+    - {step: "Remove duplicate applications", description: "Deduplicated on application_id"}
+    - {step: "Impute missing income", description: "Median imputation by ZIP code + job category"}
+
+  contains_pii: true
+  pii_fields: [full_name, address, date_of_birth]
+  legal_basis: "Customer consent for credit assessment (GDPR Art. 6.1.b)"
+  retention_policy: "7 years from application date per banking regulations"
