@@ -29,3 +29,15 @@ jobs:
         run: |
           python tools/mcml.py compliance-check examples/credit-scoring --framework nist
           python tools/mcml.py compliance-check examples/credit-scoring --framework eu-ai-act
+
+  gateway-scenarios:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt -r gateway/requirements.txt
+      - name: Runtime safety scenarios (prototype gateway)
+        working-directory: gateway
+        run: python -m mcml_gateway scenarios --out /tmp/RESULTS.md

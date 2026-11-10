@@ -19,7 +19,7 @@ MCML closes that gap in two steps:
 | | What it does | Status |
 |---|---|---|
 | **1. Pre-deployment gate** | Blocks deployment when safety evidence is missing: failure modes, evaluations that missed their thresholds, no human oversight, no tested kill switch, or a configuration that would let the agent bypass enforcement | ✅ **Available** |
-| **2. Runtime enforcement gateway** | Enforces the signed Agentic Governance Card on every MCP tool call, from **outside the agent's runtime**, so enforcement does not depend on the agent's cooperation | 🚧 **In development** |
+| **2. Runtime enforcement gateway** | Enforces the signed Agentic Governance Card on every MCP tool call, from **outside the agent's runtime**, so enforcement does not depend on the agent's cooperation | 🧪 **Prototype**: 7 of 7 scenarios pass in a synthetic environment ([results](https://mcml-standard.org/gateway/RESULTS.html)) |
 
 **The runtime gateway is designed to:**
 
@@ -30,7 +30,7 @@ MCML closes that gap in two steps:
 - 🧪 **Block payload injection**: tool arguments must match the schema declared in the card
 - 🧾 **Record linked evidence**: agent version, card version, gateway decision and the tool's own receipt
 
-It is being tested against six scenarios, including **gateway bypass**, **model provenance injection** and **adversarial payload injection**, in a synthetic clinical workflow. We publish its limits too: it enforces declared limits, so an action the card permits can still cause harm.
+The [prototype](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/gateway) passes seven scenarios, including **gateway bypass**, **model provenance injection** and **adversarial payload injection**, in a synthetic clinical workflow, and the tests run on every commit. It has not been tested in production. We publish its limits too: it enforces declared limits, so an action the card permits can still cause harm.
 
 ### **[→ Read the MCML Runtime Safety specification](https://mcml-standard.org/docs/runtime-safety.html)**
 
@@ -920,7 +920,7 @@ analysis = IncidentInvestigator().analyze_incident(
 # Returns the event, the model and dataset cards in force, and the matching known limitations and biases
 ```
 
-### 5. Runtime Enforcement and Kill Switch for Agents (in development)
+### 5. Runtime Enforcement and Kill Switch for Agents (prototype)
 
 A gateway outside the agent's runtime enforces the signed Agentic Governance Card on every MCP tool call: it holds tool credentials, runs an out-of-band kill switch, checks model attestation, validates tool arguments, and links each decision to the tool's own receipt. See the **[MCML Runtime Safety specification](https://mcml-standard.org/docs/runtime-safety.html)** for the architecture, card fields, six-scenario threat model and known limits.
 
@@ -1007,8 +1007,8 @@ MCML is an **open standard**. Contributions are welcome through [GitHub issues](
 ✅ **Runtime safety fields** in the Agentic Governance Card schema, with gate checks that block configurations an agent could bypass
 
 🔲 **In development**
-- Runtime enforcement gateway for MCP tool calls: out-of-band kill switch, model provenance checks, payload validation, tamper-evident decision records
-- Published results for the six runtime test scenarios
+- Runtime enforcement gateway for MCP tool calls: prototype published in `gateway/` with out-of-band kill switch, model provenance checks, payload validation, signed tool receipts and hash-chained evidence; 7 of 7 synthetic scenarios pass
+- Production pilot with a partner organization
 - Mappings to NIST AI Agent Standards Initiative and OWASP Top 10 for Agentic Applications
 
 🔲 **Planned**
