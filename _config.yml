@@ -1,0 +1,5 @@
+# GitHub Pages settings for mcml-standard.org
+# The theme hides this title on any page whose own title matches it (the homepage),
+# and shows it as a "back to home" link on other pages.
+title: "Model Connect Markup Language (MCML)"
+description: "An open, machine-readable standard that turns AI safety and governance claims into checkable, enforceable controls."
