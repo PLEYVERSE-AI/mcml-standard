@@ -1,0 +1,23 @@
+agentic_governance_card:
+  schema_version: "1.1"
+  agent_name: triage_agent
+  agent_version: "0.3.0"
+  identity:
+    agent_id: "agent://clinical/triage/0.3.0"
+    owner: "Applied ML"
+  autonomy:
+    level: autonomous
+  authorization:
+    tools:
+      - name: update_triage_priority
+        scopes: ["triage:write"]
+    forbidden_actions: []
+  enforcement:
+    enforcement_point: "None declared"
+    violation_behavior: "Log only"
+    audit_log:
+      captures: [tool, timestamp]
+      tamper_evident: false
+  human_oversight:
+    escalation_rules:
+      - {condition: "never", action: none}

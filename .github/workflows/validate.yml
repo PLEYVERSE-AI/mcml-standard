@@ -1,0 +1,31 @@
+name: Validate MCML cards
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+
+      - name: Valid example stacks pass the deployment gate
+        run: |
+          python tools/mcml.py pre-deploy-check examples/credit-scoring --require-agent
+          python tools/mcml.py pre-deploy-check examples/clinical-alert-agent --require-agent
+
+      - name: Incomplete stack is blocked
+        run: |
+          if python tools/mcml.py pre-deploy-check examples/blocked-deployment --require-agent; then
+            echo "Expected the deployment gate to block examples/blocked-deployment"; exit 1
+          fi
+
+      - name: Framework evidence reports
+        run: |
+          python tools/mcml.py compliance-check examples/credit-scoring --framework nist
+          python tools/mcml.py compliance-check examples/credit-scoring --framework eu-ai-act

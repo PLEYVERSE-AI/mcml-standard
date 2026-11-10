@@ -1,9 +1,9 @@
-# ModelConnect Markup Language (MCML)
+# Model Connect Markup Language (MCML)
 
 **An open, machine-readable standard for AI governance documentation**
 
-[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Specification](https://img.shields.io/badge/spec-v1.1%20draft-blue)](https://mcml-standard.org/spec/v1.1)
+[![Spec: CC BY 4.0](https://img.shields.io/badge/spec-CC%20BY%204.0-lightgrey.svg)](LICENSE-SPEC) [![Code: GPL-3.0](https://img.shields.io/badge/code-GPL--3.0-blue.svg)](LICENSE)
+[![Specification](https://img.shields.io/badge/spec-v1.1%20draft-blue)](schema/v1.1/)
 [![Status](https://img.shields.io/badge/status-draft-orange)]()
 
 > **A unified standard for AI governance documentation — making safety and compliance claims checkable, not just stated.**
@@ -161,7 +161,7 @@ GET /governance/lineage/event_12345
 
 ## Reference Implementation: Patent-Pending Two-Layer Architecture
 
-While MCML is **implementation-agnostic** (you can use any database, file system, or architecture), we provide a **reference implementation** that demonstrates the power of machine readability through our **patent-pending two-layer architecture**.
+While MCML is **implementation-agnostic** (you can use any database, file system, or architecture), we describe a **reference architecture**, our **patent-pending two-layer architecture**, that demonstrates the power of machine readability. The schemas, example cards and validator in this repository implement the pre-deployment checks; the two-layer database implementation is described here and is not yet published as code.
 
 ### The Architecture
 
@@ -768,412 +768,164 @@ MCML maps to these references by topic. It does not claim endorsement by NIST, O
 
 ## Getting Started
 
-> [Confirm the package name, CLI commands, and SDK classes before publishing. Mark any that are not yet released as "planned."]
+This repository contains the MCML v1.1 JSON Schemas, example cards, and a reference validator (`tools/mcml.py`) that checks cards and acts as a pre-deployment gate. A pip-installable package and Python SDK are planned (see [Roadmap](#roadmap)).
 
-### 1. Install MCML Tools
+### 1. Install
 
 ```bash
-pip install mcml-standard
+git clone https://github.com/PLEYVERSE-AI/mcml-standard
+cd mcml-standard
+pip install -r requirements.txt
 ```
 
-### 2. Create Your First Model Card
+### 2. Validate cards against the schemas
 
-```python
-from mcml import ModelCard
-
-# Create Model Card following MCML schema
-model_card = ModelCard(
-    model_name="credit_risk_scorer",
-    version="3.2.1",
-    intended_use="Credit risk assessment for personal loans up to $50K",
-    training_dataset_ref="dataset://customer_credit_data/v2.3",
-    performance_metrics={
-        "auc": 0.87,
-        "f1_score": 0.82
-    },
-    fairness_metrics={
-        "demographic_parity": 0.92,
-        "equal_opportunity": 0.94
-    },
-    limitations=[
-        "Not validated for commercial loans",
-        "Performance degrades for recent immigrants"
-    ],
-    responsible_team="ML Engineering - Credit Models"
-)
-
-# Validate against MCML schema
-validation_result = model_card.validate()
-print(validation_result)  # {'valid': True, 'errors': []}
-
-# Check compliance with NIST AI RMF
-nist_compliance = model_card.check_compliance(framework="nist_rmf")
-print(nist_compliance)
-# {
-#   'GOVERN': True,
-#   'MAP': True,
-#   'MEASURE': True,
-#   'MANAGE': False,  # Missing monitoring commitments or agentic governance card
-#   'overall': False
-# }
-
-# Export to YAML
-model_card.save("model_cards/credit_scorer_v3.2.1.yaml")
+```bash
+python tools/mcml.py validate examples/credit-scoring/*.yaml
 ```
 
-### 3. Create Dataset Card
-
-```python
-from mcml import DatasetCard
-
-dataset_card = DatasetCard(
-    dataset_name="customer_credit_data",
-    version="2.3",
-    collection_method="Production credit applications 2023-2024",
-    known_biases=[
-        {
-            "bias_type": "geographic",
-            "description": "Urban areas over-represented",
-            "mitigation": "Synthetic rural data augmentation"
-        }
-    ],
-    quality_metrics={
-        "completeness": 0.94,
-        "consistency_score": 0.89
-    },
-    contains_pii=True,
-    pii_fields=["national_id", "full_name", "address"],
-    legal_basis="Customer consent (GDPR Art. 6.1.b)",
-    data_owner="Data Governance Office"
-)
-
-dataset_card.save("dataset_cards/customer_credit_data_v2.3.yaml")
+```
+PASS examples/credit-scoring/agentic-governance-card.yaml (agentic_governance_card)
+PASS examples/credit-scoring/dataset-card.yaml (dataset_card)
+PASS examples/credit-scoring/interface-card.yaml (interface_card)
+PASS examples/credit-scoring/model-card.yaml (model_card)
 ```
 
-### 4. Validate Complete Governance Stack
+Cards are YAML or JSON files whose top-level key names the card type: `model_card`, `dataset_card`, `interface_card` or `agentic_governance_card`. The schemas are in [`schema/v1.1/`](schema/v1.1/) and can be used with any JSON Schema (draft 2020-12) validator.
 
-```python
-from mcml import GovernanceValidator
+### 3. Report framework evidence
 
-# Validate all card types together
-validator = GovernanceValidator()
-
-result = validator.validate_complete_stack(
-    model_card="model_cards/credit_scorer_v3.2.1.yaml",
-    dataset_card="dataset_cards/customer_credit_data_v2.3.yaml",
-    interface_card="interface_cards/credit_api_v2.1.0.yaml",
-    agentic_governance_card="agentic_governance_cards/loan_agent_v1.3.0.yaml",
-    framework="nist_rmf"
-)
-
-print(result)
-# {
-#   'valid': True,
-#   'all_cards_present': True,
-#   'relationships_valid': True,
-#   'nist_compliance': {
-#     'GOVERN': True,
-#     'MAP': True,
-#     'MEASURE': True,
-#     'MANAGE': True,
-#     'overall': True
-#   }
-# }
+```bash
+python tools/mcml.py compliance-check examples/credit-scoring --framework nist       # or eu-ai-act
 ```
 
-### 5. Integrate with CI/CD
+```
+PASS  GOVERN
+PASS  MAP
+PASS  MEASURE
+PASS  MANAGE
+
+nist: evidence present for all requirements
+Note: this reports documentation evidence, not legal compliance.
+```
+
+### 4. Gate deployment
+
+`pre-deploy-check` exits non-zero, blocking the pipeline, when:
+
+- a required card (Model, Dataset, Interface; Agentic Governance with `--require-agent`) is missing or fails its schema
+- a card reference (for example `training_dataset_ref`) does not resolve to a card in the stack
+- the Model Card lacks safety evidence (failure modes, evaluation evidence, human oversight, monitoring commitments, risk acceptance), an evaluation metric missed its threshold, the risk category is `unacceptable`, or the risk-acceptance review is overdue
+- an Agentic Governance Card has no kill switch, no recorded kill-switch test, or an audit log that is not tamper-evident
+
+```bash
+python tools/mcml.py pre-deploy-check examples/blocked-deployment --require-agent
+```
+
+```
+DEPLOYMENT BLOCKED
+  - examples/blocked-deployment/agentic-governance-card.yaml: agentic_governance_card: 'kill_switch' is a required property
+  - missing required dataset_card
+  - missing required interface_card
+  - examples/blocked-deployment/model-card.yaml: safety field 'failure_modes' is missing
+  ...
+```
+
+### 5. Add the gate to CI/CD
+
+[`.github/workflows/validate.yml`](.github/workflows/validate.yml) runs the gate on every push. To use it in your own pipeline:
 
 ```yaml
-# .github/workflows/validate-governance.yml
-name: MCML Governance Validation
-
-on: [push, pull_request]
-
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install MCML
-        run: pip install mcml-standard
-
-      - name: Validate Model Cards
-        run: |
-          mcml validate \
-            --card-type model \
-            --directory model_cards/ \
-            --schema-version 1.1
-
-      - name: Validate Dataset Cards
-        run: |
-          mcml validate \
-            --card-type dataset \
-            --directory dataset_cards/ \
-            --schema-version 1.1
-
-      - name: Check NIST AI RMF Compliance
-        run: |
-          mcml compliance-check \
-            --framework nist_rmf \
-            --model-card model_cards/credit_scorer_v3.2.1.yaml \
-            --dataset-card dataset_cards/customer_credit_data_v2.3.yaml \
-            --interface-card interface_cards/credit_api_v2.1.0.yaml
-
-          # Exit with error if not compliant
-          if [ $? -ne 0 ]; then
-            echo "❌ NIST AI RMF compliance failed"
-            exit 1
-          fi
+- run: pip install -r requirements.txt
+- run: python tools/mcml.py pre-deploy-check governance/ --require-agent
 ```
 
-### 6. Deploy with Reference Implementation
+### Examples
 
-If using the patent-pending two-layer architecture:
-
-```python
-from mcml.reference_implementation import TwoLayerArchitecture
-
-# Initialize reference implementation (PostgreSQL + foreign keys)
-architecture = TwoLayerArchitecture(database_url="postgresql://...")
-
-# Deploy model with governance
-deployment = architecture.deploy_model(
-    model_card_path="model_cards/credit_scorer_v3.2.1.yaml",
-    dataset_card_path="dataset_cards/customer_credit_data_v2.3.yaml",
-    interface_card_path="interface_cards/credit_api_v2.1.0.yaml",
-    model_artifact_uri="s3://models/credit_scorer/v3.2.1/",
-    environment="production"
-)
-
-# Foreign key constraints ensure all cards exist before deployment
-print(deployment)
-# {
-#   'model_registry_id': '550e8400-...',
-#   'governance_complete': True,
-#   'deployed_at': '2025-01-15T10:00:00Z',
-#   'status': 'active'
-# }
-
-# Query complete lineage
-lineage = architecture.get_lineage(inference_event_id="evt_12345")
-print(lineage.model_card.intended_use)
-print(lineage.dataset_card.known_biases)
-```
+| Folder | What it shows |
+|--------|---------------|
+| [`examples/credit-scoring/`](examples/credit-scoring/) | Complete four-card stack for a credit model and a loan agent; passes the gate |
+| [`examples/clinical-alert-agent/`](examples/clinical-alert-agent/) | Synthetic healthcare stack: an agent that may page a rapid response team only after charge-nurse approval; passes the gate |
+| [`examples/blocked-deployment/`](examples/blocked-deployment/) | Incomplete stack the gate refuses |
 
 ---
 
 ## Use Cases
 
-### 1. Pre-Deployment Validation
+The validator above implements use case 1. Use cases 2 to 5 describe planned SDK capabilities; the code shown is illustrative and not yet released.
 
-**Block incomplete deployments:**
+### 1. Pre-Deployment Validation (available)
 
-```bash
-$ mcml pre-deploy-check \
-    --model-card credit_scorer_v3.2.1.yaml \
-    --dataset-card customer_data_v2.3.yaml \
-    --framework eu_ai_act
+**Block incomplete deployments** with `python tools/mcml.py pre-deploy-check <dir>`. See [Getting Started](#4-gate-deployment).
 
-❌ Deployment blocked: Missing required fields
-  - model_card.fairness_metrics (required for HIGH risk)
-  - agentic_governance_card missing (required for autonomous decisions)
-
-Fix these issues before deploying to production.
-```
-
-### 2. Automated Compliance Reporting
-
-**Generate regulatory reports instantly:**
+### 2. Automated Compliance Reporting (planned)
 
 ```python
-from mcml import ComplianceReporter
+from mcml import ComplianceReporter   # planned API
 
 reporter = ComplianceReporter()
-
-# Generate NIST AI RMF report
 nist_report = reporter.generate_report(
     inference_event_id="evt_12345",
     framework="nist_rmf",
     output_format="pdf"
 )
-
-# Generates complete audit trail:
-# - Executive summary
-# - GOVERN function evidence
-# - MAP function evidence
-# - MEASURE function evidence
-# - MANAGE function evidence
-# - Recommendations
-
-nist_report.save("reports/nist_compliance_evt_12345.pdf")
 ```
 
-### 3. Real-Time Governance Monitoring
-
-**Dashboard showing live compliance status:**
+### 3. Governance Monitoring (planned)
 
 ```python
-from mcml import GovernanceDashboard
+from mcml import GovernanceDashboard   # planned API
 
-dashboard = GovernanceDashboard()
-
-status = dashboard.get_production_status()
-
-print(status)
-# {
-#   'total_models': 47,
-#   'fully_documented': 44,
-#   'missing_cards': 3,
-#   'compliance_status': {
-#     'nist_rmf_compliant': 42,
-#     'eu_ai_act_compliant': 40,
-#     'gdpr_compliant': 47
-#   },
-#   'at_risk_models': [
-#     {
-#       'model': 'fraud_detector_v2.1',
-#       'issue': 'Missing fairness_metrics',
-#       'deadline': '2025-02-01'
-#     }
-#   ]
-# }
+status = GovernanceDashboard().get_production_status()
+# {'total_models': ..., 'fully_documented': ..., 'missing_cards': ...}
 ```
 
-### 4. Incident Investigation
-
-**Instant root cause analysis:**
+### 4. Incident Investigation (planned)
 
 ```python
-from mcml import IncidentInvestigator
+from mcml import IncidentInvestigator   # planned API
 
-investigator = IncidentInvestigator()
-
-# Investigate biased prediction
-analysis = investigator.analyze_incident(
+analysis = IncidentInvestigator().analyze_incident(
     inference_event_id="incident_789",
     include_full_lineage=True
 )
-
-print(analysis)
-# {
-#   'event': {
-#     'timestamp': '2025-01-15T14:23:45Z',
-#     'prediction': 'DENY',
-#     'confidence': 0.62
-#   },
-#   'model': {
-#     'name': 'credit_scorer',
-#     'version': '3.2.1',
-#     'known_limitations': [
-#       'Performance degrades for recent immigrants'
-#     ]
-#   },
-#   'dataset': {
-#     'known_biases': [
-#       {
-#         'type': 'demographic',
-#         'description': 'Limited recent immigrant data',
-#         'impact': 'May underperform for this group'
-#       }
-#     ]
-#   },
-#   'root_cause': 'Applicant in known high-risk group with limited training data',
-#   'recommendation': 'Manual review required per escalation rules'
-# }
+# Returns the event, the model and dataset cards in force, and the matching known limitations and biases
 ```
 
-### 5. Agent Governance and Safety
+### 5. Runtime Enforcement for Agents (in development)
 
-**Monitor autonomous agent behavior:**
+The Agentic Governance Card declares what an agent may do. The next step is enforcing it at runtime, without relying on the agent's cooperation: a gateway outside the agent's runtime checks each MCP tool call against the card before forwarding it, and writes a tamper-evident record linking the agent version, card version, gateway decision and tool receipt. Test cases under development, using the synthetic [`clinical-alert-agent`](examples/clinical-alert-agent/) workflow:
 
-```python
-from mcml import AgentMonitor
+- an approved tool call
+- a tool call after human approval is withdrawn
+- kill-switch activation mid-workflow (credential revocation and session termination)
+- an attempt to reach the tool without going through the gateway
 
-monitor = AgentMonitor()
-
-# Check if agent action complies with governance
-action_check = monitor.validate_action(
-    agent_id="loan_approval_agent",
-    proposed_action={
-        'type': 'approve_loan',
-        'loan_amount': 30000,
-        'confidence': 0.82
-    }
-)
-
-print(action_check)
-# {
-#   'allowed': False,
-#   'reason': 'Exceeds decision authority (max: $25,000)',
-#   'required_action': 'escalate_to_senior_underwriter',
-#   'escalation_sla': '24 hours',
-#   'agentic_governance_card_ref': 'agent://loan_approval_agent/v1.3.0'
-# }
-```
+Known limit: enforcement covers declared limits only. An action the card permits can still cause harm.
 
 ---
 
 ## Documentation
 
-📖 **[Complete Specification](https://mcml-standard.org/spec/v1.1)** [confirm published]
-
-### Core Documentation
-- [MCML Standard Overview](https://mcml-standard.org/)
-- [Card Schema Specifications](https://mcml-standard.org/schemas/)
-- [Compliance Framework Mappings](https://mcml-standard.org/compliance/)
-- [Machine-Readable Protocol](https://mcml-standard.org/protocol/)
-
-### Implementation Guides
-- [Reference Implementation (Two-Layer Architecture)](https://mcml-standard.org/reference-implementation/)
-- [PostgreSQL Setup Guide](https://mcml-standard.org/guides/postgresql/)
-- [Alternative Implementations](https://mcml-standard.org/guides/alternatives/)
-- [MLflow Integration](https://mcml-standard.org/integrations/mlflow/)
-- [CI/CD Integration](https://mcml-standard.org/integrations/cicd/)
-
-[Confirm each implementation guide is published before linking.]
-
-### Compliance Guides
-- [NIST AI RMF Compliance](https://mcml-standard.org/compliance/nist-rmf/)
-- [EU AI Act Compliance](https://mcml-standard.org/compliance/eu-ai-act/)
-- [ISO/IEC 42001 Compliance](https://mcml-standard.org/compliance/iso-42001/)
-- [GDPR Compliance](https://mcml-standard.org/compliance/gdpr/)
-- [FDA Medical Device Compliance](https://mcml-standard.org/compliance/fda/)
-
-### API Reference
-- [Python SDK](https://mcml-standard.org/sdk/python/)
-- [REST API](https://mcml-standard.org/api/rest/)
-- [CLI Tools](https://mcml-standard.org/cli/)
-
-[Confirm each API reference is published before linking.]
+- **Specification overview**: this README
+- **Detailed specification draft**: [`docs/mcml-spec.md`](docs/mcml-spec.md)
+- **JSON Schemas**: [`schema/v1.1/`](schema/v1.1/)
+- **Example cards**: [`examples/`](examples/)
+- **Validator**: [`tools/mcml.py`](tools/mcml.py)
+- **Website**: [mcml-standard.org](https://mcml-standard.org)
 
 ---
 
 ## Schema Downloads
 
-### MCML v1.1 Schemas (JSON Schema)
+### MCML v1.1 Schemas (JSON Schema, draft 2020-12)
 
-- **[Model Card Schema](https://mcml-standard.org/schemas/v1.1/model-card.schema.json)**: machine-readable Model Card specification
-- **[Dataset Card Schema](https://mcml-standard.org/schemas/v1.1/dataset-card.schema.json)**: machine-readable Dataset Card specification
-- **[Interface Card Schema](https://mcml-standard.org/schemas/v1.1/interface-card.schema.json)**: machine-readable Interface Card specification
-- **[Agentic Governance Card Schema](https://mcml-standard.org/schemas/v1.1/agentic-governance-card.schema.json)**: machine-readable Agentic Governance Card specification
+- **[Model Card Schema](schema/v1.1/model-card.schema.json)**
+- **[Dataset Card Schema](schema/v1.1/dataset-card.schema.json)**
+- **[Interface Card Schema](schema/v1.1/interface-card.schema.json)**
+- **[Agentic Governance Card Schema](schema/v1.1/agentic-governance-card.schema.json)**
 
-[Confirm schemas are published at these paths before release.]
-
-### Example Cards
-
-- **[Model Card Example (YAML)](https://mcml-standard.org/examples/model-card.yaml)**
-- **[Dataset Card Example (YAML)](https://mcml-standard.org/examples/dataset-card.yaml)**
-- **[Interface Card Example (YAML)](https://mcml-standard.org/examples/interface-card.yaml)**
-- **[Agentic Governance Card Example (YAML)](https://mcml-standard.org/examples/agentic-governance-card.yaml)**
-- **[Complete Governance Stack](https://mcml-standard.org/examples/complete-stack/)**
-
-### Compliance Templates
-
-- **[NIST AI RMF Template](https://mcml-standard.org/templates/nist-rmf/)**
-- **[EU AI Act Template](https://mcml-standard.org/templates/eu-ai-act/)**
-- **[ISO 42001 Template](https://mcml-standard.org/templates/iso-42001/)**
+Schemas allow additional properties, so organizations can add their own fields while staying valid.
 
 ---
 
@@ -1181,54 +933,35 @@ print(action_check)
 
 ### Contributing
 
-MCML is an **open standard**. We welcome contributions:
+MCML is an **open standard**. Contributions are welcome through [GitHub issues](https://github.com/PLEYVERSE-AI/mcml-standard/issues) and pull requests:
 
-- **Schema Enhancements**: propose new fields, relationships, or card types
-- **Compliance Mappings**: add frameworks (ISO 27001, SOC2, sector-specific)
-- **Implementation Patterns**: share your architecture and learnings
-- **Tooling**: build validators, generators, visualizers, IDE extensions
-- **Documentation**: improve guides, add examples, translate content
+- **Schema enhancements**: new fields, relationships, or card types
+- **Compliance mappings**: additional frameworks (ISO 27001, SOC 2, sector-specific)
+- **Implementation patterns**: architectures and lessons learned
+- **Tooling**: validators, generators, visualizers, IDE extensions
+- **Documentation**: guides, examples, translations
 
-See **[CONTRIBUTING.md](CONTRIBUTING.md)** for detailed guidelines. [Confirm the file exists in the repository.]
+### Tooling
 
-### Governance
+**Available in this repository:**
+- **MCML validator** (`tools/mcml.py`): schema validation, framework evidence reports, pre-deployment gate
+- **CI workflow** (`.github/workflows/validate.yml`): runs the gate on every push
 
-[Describe the governance body and its membership only once it exists. Include the meeting schedule and how to join.]
-
-### Adopters
-
-Organizations using MCML in production:
-- *[List organizations that have agreed to be named. Remove this section until there are adopters to list.]*
-
-### Complementary Tools
-
-[List only integrations, IDE extensions, and validation tools that exist and are maintained. Mark planned items as planned.]
-
-**Integrations:**
-- **MLflow MCML Plugin**: auto-generate Model Cards from experiments
-- **Great Expectations Bridge**: link data tests to Dataset Cards
-- **Weights & Biases Integration**: export W&B metadata to MCML
-- **LangChain MCML**: document LangChain applications with Agentic Governance Cards
-
-**IDE Extensions:**
-- **VS Code MCML Extension**: syntax highlighting, validation, auto-complete
-- **IntelliJ MCML Plugin**: schema validation, reference navigation
-- **Jupyter MCML Widget**: interactive card creation in notebooks
-
-**Validation Tools:**
-- **MCML CLI**: command-line validation and compliance checking
-- **MCML Linter**: pre-commit hooks for card validation
-- **MCML Dashboard**: web UI for governance monitoring
+**Planned:**
+- pip package and Python SDK
+- MCP runtime enforcement gateway
+- MLflow, Great Expectations, Weights & Biases and LangChain integrations
+- VS Code extension and pre-commit linter
+- Governance dashboard
 
 ---
 
 ## Roadmap
 
-### Current: v1.0 (January 2026)
+### v1.0 (January 2026)
 
 ✅ **Core Specification**
 - Four card types formalized (Model, Dataset, Interface, Agentic)
-- JSON Schema definitions for all cards
 - URI-based relationship model
 - Versioning and temporal validity
 
@@ -1238,48 +971,33 @@ Organizations using MCML in production:
 - ISO/IEC 42001
 - GDPR (high-level)
 
-✅ **Reference Implementation**
-- Two-layer architecture (patent pending)
-- PostgreSQL/TimescaleDB schema
-- Python SDK
-- CLI tools
+✅ **Reference Architecture**
+- Two-layer architecture (patent pending), described above
 
-### Draft: v1.1
+### v1.1 (draft, current)
 
-🔲 **Agentic Governance**
+✅ **Published in this repository**
+- JSON Schemas for all four card types
 - Agentic Governance Card replacing `agentic_card`: identity, scoped and time-limited authorization, delegation chains, runtime enforcement, kill switch
-- Compatibility ranges and `last_verified` dates replace pinned framework versions
+- Model safety extension: failure modes, evaluation evidence, human oversight, monitoring commitments, risk acceptance
+- Reference validator with framework evidence reports and a pre-deployment gate
+- Example stacks, including a synthetic clinical alert agent
+
+🔲 **In development**
+- Runtime enforcement gateway for MCP tool calls, with tamper-evident decision records
 - Mappings to NIST AI Agent Standards Initiative and OWASP Top 10 for Agentic Applications
 
-🔲 **Model Safety Extension**
-- Failure modes, evaluation evidence, human oversight, monitoring commitments, risk acceptance
+🔲 **Planned**
+- pip package and Python SDK
+- Detailed GDPR, FDA, ISO/IEC 23894 and SR 11-7 mappings
+- Protobuf and GraphQL schema definitions; OpenAPI specification for MCML REST APIs
+- Additional SDKs (TypeScript, Go, Java, Rust)
+- Governance graph explorer, card generation from code, card diff tools
 
-🔲 **Enhanced Compliance**
-- Detailed GDPR mapping (all Articles)
-- FDA medical device regulations
-- ISO/IEC 23894 (AI risk management)
-- Financial services regulations (SR 11-7, model risk management)
-
-🔲 **Additional Schemas**
-- Protobuf schema definitions (in addition to JSON Schema)
-- GraphQL schema for API implementations
-- OpenAPI specification for MCML REST APIs
-
-🔲 **Multi-Language SDKs**
-- JavaScript/TypeScript SDK
-- Go SDK
-- Java SDK
-- Rust SDK
-
-🔲 **Advanced Tooling**
-- MCML visualization tools (governance graph explorer)
-- Automated card generation from code
-- Diff tools for card versioning
-
-### Planned: v1.2
+### v1.2 (planned)
 
 🔲 **Incident Card**: link post-deployment incidents to cards
-🔲 **Safety extension validator**: check v1.1 safety fields automatically
+🔲 **Proposed MCP extension** for agent governance evidence, if runtime testing supports it
 
 ### Future Exploration
 
@@ -1319,13 +1037,13 @@ A: MCML enables **automated compliance** by making AI governance documentation m
 A: No. The two-layer architecture with foreign keys is our **patent-pending reference implementation** that demonstrates the benefits of MCML. You can implement MCML using any database, file system, or architecture. The standard is implementation-agnostic.
 
 **Q: What makes MCML "machine-readable"?**
-A: MCML provides JSON/YAML schemas with formal validation rules, structured field definitions, and programmatic APIs. This allows tools to parse, validate, and query governance documentation automatically.
+A: MCML provides JSON Schemas with formal validation rules and structured field definitions, plus a reference validator. This allows tools to parse, validate, and query governance documentation automatically.
 
 **Q: How does MCML relate to NIST AI RMF / EU AI Act / GDPR?**
 A: MCML provides **mappings** from card fields to regulatory requirements. It helps you demonstrate compliance but doesn't guarantee it. You still need to satisfy the actual regulatory requirements. MCML makes it easier to document and prove.
 
 **Q: Can I extend MCML with custom fields?**
-A: Yes. MCML schemas support `additionalProperties` for organization-specific extensions. You can add custom fields while maintaining compatibility with the core standard. [Confirm this against the published schema before release.]
+A: Yes. MCML schemas support `additionalProperties` for organization-specific extensions. You can add custom fields while maintaining compatibility with the core standard.
 
 **Q: How do the four card types relate?**
 A: Cards reference each other via URIs:
@@ -1341,13 +1059,10 @@ A: Agentic Governance Cards are optional. If you're not deploying autonomous age
 A: MCML is designed for AI/ML systems. For traditional software, use standard documentation practices (OpenAPI, README, etc.). However, Interface Cards can document any API.
 
 **Q: How do I migrate existing documentation to MCML?**
-A: [Confirm migration tooling exists before publishing this answer.] Example:
-```bash
-mcml migrate --from google-model-card --input existing_card.md --output model_card.yaml
-```
+A: Migration tooling is planned. Today, copy the relevant fields from your existing Model Card or Datasheet into the YAML structure shown in [`examples/`](examples/) and run `python tools/mcml.py validate` until it passes.
 
 **Q: What if I'm already using MLflow / Weights & Biases / other MLOps tools?**
-A: MCML integrates with existing tools. Use plugins to auto-generate MCML cards from your MLOps metadata, then add governance-specific fields (intended use, limitations, etc.).
+A: MCML is designed to sit alongside existing tools. Cards are plain YAML or JSON, so they can be generated from MLOps metadata by your own scripts; official MLflow and W&B integrations are planned.
 
 **Q: How often should cards be updated?**
 A:
@@ -1369,64 +1084,39 @@ A: Dataset Cards can document data characteristics (biases, quality) without exp
 
 ## Presentations
 
-- "MCML: A Universal Schema for AI Traceability & Lifecycle Governance," co-presented with Alex Olaniyan (Playverse AI), virtual Day 1 session, 6th annual MLOps World | GenAI Summit, October 2025. [Recording](https://www.youtube.com/watch?v=BKLwwvKk0DE)
+- "MCML: A Universal Schema for AI Traceability & Lifecycle Governance," co-presented with Alex Olaniyan (PLEYVERSE AI), virtual Day 1 session, 6th annual MLOps World | GenAI Summit, October 2025. [Recording](https://www.youtube.com/watch?v=BKLwwvKk0DE)
 
 ---
 
 ## Patents
 
-The two-layer architecture with foreign key relationships for AI governance is **patent pending**. Commercial use of that architecture requires a license. The MCML specification is released under CC BY 4.0 and can be implemented without a patent license.
+The two-layer architecture with foreign key relationships for AI governance is **patent pending**. Implementing the MCML specification and schemas does not require a patent license.
 
 ---
 
 ## License
 
-### MCML Specification
+MCML is open in the way Linux is: free to use and build on, with changes to the code shared back, and commercial licenses available.
 
-The MCML standard specification (schemas, documentation, compliance mappings) is released under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+### Specification, schemas and documentation: CC BY 4.0
 
-You are free to:
-- Use MCML in commercial and non-commercial projects
-- Modify and extend MCML schemas
-- Create tools and implementations
+The MCML specification, JSON Schemas, compliance mappings, example cards and documentation are licensed under **[Creative Commons Attribution 4.0 International](LICENSE-SPEC)**. Anyone, including commercial vendors, may use, adapt and implement the standard, provided they give credit and indicate changes.
 
-You must:
-- Give appropriate credit to MCML
-- Indicate if changes were made
+### Code: GPL-3.0, or a commercial license
 
-### Reference Implementation Code
+The code in this repository (`tools/` and any future SDKs, gateway and reference implementation code) is licensed under the **[GNU General Public License v3.0 or later](LICENSE)**. You may use it for any purpose, including commercially. If you distribute modified versions, you must release them under the same license.
 
-The reference implementation code (two-layer architecture, SDKs, tools) is dual-licensed:
+Organizations that want to embed or distribute the code in proprietary products without GPL obligations can obtain a **commercial license**: contact [lanre@pleyverse.com](mailto:lanre@pleyverse.com).
 
-- **Open Source License**: MIT License (for non-commercial use and evaluation)
-- **Commercial License**: Contact [licensing@mcml-standard.org](mailto:licensing@mcml-standard.org) for production use of the patent-pending two-layer architecture
-
-Academic and non-profit use is permitted under the MIT License.
+Contributions are accepted under the same terms, so the project can continue to offer both licenses.
 
 ---
 
 ## Contact and Support
 
-### General Inquiries
-- 📧 **Email**: [info@mcml-standard.org](mailto:info@mcml-standard.org) [confirm active]
 - 🌐 **Website**: [https://mcml-standard.org](https://mcml-standard.org)
-
-### Technical Support
-- 💬 **GitHub Discussions**: [MCML GitHub repository](https://github.com/PLEYVERSE-AI/mcml-standard) [confirm discussions are enabled]
-- 🐛 **Bug Reports**: [GitHub issues](https://github.com/PLEYVERSE-AI/mcml-standard/issues) [confirm]
-- 📚 **Documentation**: [https://mcml-standard.org/docs](https://mcml-standard.org/docs)
-
-### Standards Working Group
-- 📝 **Proposals**: [GitHub proposals](https://github.com/PLEYVERSE-AI/mcml-standard/discussions) [confirm]
-- 📅 **Meeting Schedule**: [describe only once the group meets]
-- 👥 **Join the Working Group**: [join link, once it exists]
-
-### Commercial Licensing (Reference Implementation)
-- 💼 **Licensing**: [licensing@mcml-standard.org](mailto:licensing@mcml-standard.org) [confirm active]
-- 🤝 **Enterprise Support**: [enterprise@mcml-standard.org](mailto:enterprise@mcml-standard.org) [confirm active]
-
-### Social Media
-- [List only accounts you own and have confirmed.]
+- 🐛 **Issues and proposals**: [GitHub issues](https://github.com/PLEYVERSE-AI/mcml-standard/issues)
+- 📧 **Author**: Dr. Olanrewaju Ogunkunle, [lanre@pleyverse.com](mailto:lanre@pleyverse.com)
 
 ---
 
@@ -1459,7 +1149,7 @@ If you use MCML in research or production, please cite:
 
 ```bibtex
 @misc{mcml_standard,
-  title  = {ModelConnect Markup Language (MCML): A Machine-Readable Standard for AI Governance},
+  title  = {Model Connect Markup Language (MCML): A Machine-Readable Standard for AI Governance},
   author = {Ogunkunle, Olanrewaju},
   year   = {2026},
   url    = {https://mcml-standard.org}
@@ -1479,6 +1169,6 @@ If you use MCML in research or production, please cite:
 
 ---
 
-**ModelConnect Markup Language (MCML): From documentation to automation. Making AI governance machine-readable, compliant, and auditable.**
+**Model Connect Markup Language (MCML): From documentation to automation. Making AI governance machine-readable, compliant, and auditable.**
 
-**Version 1.1 (draft) | Last updated: [YYYY-MM-DD]**
+**Version 1.1 (draft) | Last updated: 2026-11-10**

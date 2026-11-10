@@ -1,0 +1,24 @@
+interface_card:
+  service_name: credit_scoring_api
+  description: "Production credit scoring endpoint for loan origination system"
+  model_ref: "model://credit_risk_scorer/3.2.1"
+
+  api_specification_url: "https://api.example.com/docs/credit/v2/openapi.json"
+  supported_protocols: [REST]
+  base_url: "https://api.example.com/v2/credit"
+
+  authentication_method: oauth2
+  access_control_policy:
+    authorized_roles: [loan_officer, underwriter, risk_analyst]
+
+  rate_limits:
+    requests_per_minute: 100
+    requests_per_hour: 5000
+
+  data_classification: confidential
+  logging_level: detailed
+  log_retention_days: 365
+  compliance_frameworks: [GDPR, SOC2]
+
+  service_owner: "Platform Engineering - APIs"
+  contact_email: "api-team@example.com"

@@ -1,0 +1,15 @@
+# Synthetic example. Not a real clinical dataset.
+dataset_card:
+  dataset_name: synthetic_inpatient_vitals
+  version: "1.0"
+  collection_method: "Synthetically generated inpatient vital-sign time series"
+  data_owner: "Clinical Data Engineering"
+  known_biases:
+    - bias_type: population
+      description: "Generator calibrated on adult medical-surgical units only"
+      impact: "Unrepresentative of pediatric and ICU patients"
+      mitigation: "Excluded from intended use"
+  quality_metrics:
+    completeness: 0.99
+    plausibility_check_pass_rate: 0.97
+  contains_pii: false

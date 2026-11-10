@@ -1,0 +1,80 @@
+model_card:
+  model_name: credit_risk_scorer
+  version: 3.2.1
+
+  intended_use: "Credit risk assessment for personal loans up to $50K"
+  out_of_scope_uses:
+    - "Commercial loan assessment"
+    - "International credit scoring"
+
+  training_dataset_ref: "dataset://customer_credit_data/v2.3"
+
+  performance_metrics:
+    primary_metric: auc
+    auc: 0.87
+    f1_score: 0.82
+    precision: 0.85
+    recall: 0.79
+
+  fairness_metrics:
+    demographic_parity: 0.92
+    equal_opportunity: 0.94
+    disparate_impact: 0.88
+
+  limitations:
+    - "Performance degrades for applicants with thin credit files"
+    - "Not validated for loan amounts above $50K"
+    - "Requires annual retraining to maintain accuracy"
+
+  ethical_considerations:
+    high_risk_groups: [thin_file_applicants, first_time_borrowers]
+    mitigation_strategies:
+      - "Manual review required for confidence < 0.85"
+      - "Quarterly fairness audits by external auditor"
+
+  responsible_team: "ML Engineering - Credit Models"
+  contact_email: "ml-credit@example.com"
+
+  nist_rmf_alignment:
+    GOVERN: "Responsible team designated, approval workflow documented"
+    MAP: "Risk categorized as HIGH, context fully documented"
+    MEASURE: "Performance and fairness metrics tracked continuously"
+    MANAGE: "Monitoring commitments and risk acceptance recorded"
+
+  # Safety extension (v1.1)
+  failure_modes:
+    - id: FM-01
+      description: "Reduced accuracy for applicants with thin credit files"
+      severity: high
+      detection: "Subgroup AUC and population stability index monitoring"
+      mitigation_ref: MIT-03
+      residual_risk: medium
+
+  evaluation_evidence:
+    evaluation_date: "2026-10-10"
+    test_dataset_ref: "dataset://customer_credit_data/v2.3"
+    metrics:
+      - {metric: auc, threshold: 0.85, observed: 0.87, passed: true}
+    report_uri: "https://example.com/evals/credit_scorer_3.2.1.pdf"
+
+  human_oversight:
+    oversight_model: human_on_the_loop
+    reviewer_role: senior_underwriter
+    override_authority: "Reviewer may overturn any automated decision"
+    review_triggers: ["Confidence below 0.85", "Applicant requests explanation"]
+
+  monitoring_commitments:
+    - metric: population_stability_index
+      threshold: 0.25
+      frequency: daily
+      action_on_breach: "Suspend automated decisions and route to manual review"
+      owner: "ML Monitoring Team"
+
+  risk_acceptance:
+    risk_category: high
+    accepted_residual_risk: medium
+    accepted_by: "Chief Risk Officer"
+    accepted_on: "2026-10-15"
+    review_due: "2027-04-15"
+
+  incident_refs: []

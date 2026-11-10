@@ -1,0 +1,65 @@
+# Synthetic example. Not a real clinical system.
+model_card:
+  model_name: deterioration_risk_model
+  version: "1.0.0"
+
+  intended_use: "Flag inpatients at elevated risk of clinical deterioration for nurse review"
+  out_of_scope_uses:
+    - "Autonomous treatment decisions"
+    - "Pediatric or ICU populations"
+
+  training_dataset_ref: "dataset://synthetic_inpatient_vitals/v1.0"
+
+  performance_metrics:
+    primary_metric: auroc
+    auroc: 0.84
+    sensitivity_at_alert_threshold: 0.78
+
+  fairness_metrics:
+    auroc_gap_by_sex: 0.02
+    auroc_gap_by_age_band: 0.04
+
+  limitations:
+    - "Trained on synthetic data; requires local validation before any clinical use"
+    - "Not validated for pediatric or ICU patients"
+
+  responsible_team: "Clinical AI Governance Committee"
+
+  failure_modes:
+    - id: FM-01
+      description: "Missed deterioration when vitals are documented late"
+      severity: critical
+      detection: "Weekly chart audit of missed events"
+      residual_risk: medium
+    - id: FM-02
+      description: "Alert fatigue from false positives"
+      severity: medium
+      detection: "Alert override rate monitoring"
+      residual_risk: low
+
+  evaluation_evidence:
+    evaluation_date: "2026-10-01"
+    test_dataset_ref: "dataset://synthetic_inpatient_vitals/v1.0"
+    metrics:
+      - {metric: auroc, threshold: 0.80, observed: 0.84, passed: true}
+      - {metric: sensitivity_at_alert_threshold, threshold: 0.75, observed: 0.78, passed: true}
+
+  human_oversight:
+    oversight_model: human_in_the_loop
+    reviewer_role: charge_nurse
+    override_authority: "Charge nurse approves or dismisses every alert before it pages the rapid response team"
+    review_triggers: ["Every alert"]
+
+  monitoring_commitments:
+    - metric: alert_override_rate
+      threshold: 0.6
+      frequency: weekly
+      action_on_breach: "Pause agent alerting; revert to standard early warning score"
+      owner: "Clinical AI Governance Committee"
+
+  risk_acceptance:
+    risk_category: high
+    accepted_residual_risk: medium
+    accepted_by: "Chief Medical Information Officer"
+    accepted_on: "2026-10-15"
+    review_due: "2027-01-15"

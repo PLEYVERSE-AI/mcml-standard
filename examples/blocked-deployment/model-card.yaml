@@ -1,0 +1,7 @@
+model_card:
+  model_name: triage_summarizer
+  version: "0.3.0"
+  intended_use: "Summarize triage notes for clinicians"
+  limitations:
+    - "Not evaluated on non-English notes"
+  responsible_team: "Applied ML"
