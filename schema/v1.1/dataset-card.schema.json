@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mcml-standard.org/schemas/v1.1/dataset-card.schema.json",
+  "$id": "https://mcml-standard.org/schema/v1.1/dataset-card.schema.json",
   "title": "MCML Dataset Card",
   "description": "Governance metadata for a training or evaluation dataset (MCML v1.1 draft). Extends Datasheets for Datasets (Gebru et al., 2018).",
   "type": "object",

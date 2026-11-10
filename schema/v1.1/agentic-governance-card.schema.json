@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mcml-standard.org/schemas/v1.1/agentic-governance-card.schema.json",
+  "$id": "https://mcml-standard.org/schema/v1.1/agentic-governance-card.schema.json",
   "title": "MCML Agentic Governance Card",
   "description": "Governance metadata for an AI agent or autonomous component (MCML v1.1 draft): identity, scoped authorization, delegation, runtime enforcement, kill switch and human oversight. Replaces the v1.0 agentic_card.",
   "type": "object",
