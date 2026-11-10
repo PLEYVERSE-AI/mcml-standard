@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mcml-standard.org/schemas/v1.1/interface-card.schema.json",
+  "$id": "https://mcml-standard.org/schema/v1.1/interface-card.schema.json",
   "title": "MCML Interface Card",
   "description": "Governance metadata for an API endpoint or service that exposes a model or agent (MCML v1.1 draft).",
   "type": "object",

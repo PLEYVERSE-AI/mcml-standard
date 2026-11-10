@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://mcml-standard.org/schemas/v1.1/model-card.schema.json",
+  "$id": "https://mcml-standard.org/schema/v1.1/model-card.schema.json",
   "title": "MCML Model Card",
   "description": "Governance metadata for an ML model (MCML v1.1 draft). Extends Google Model Cards (Mitchell et al., 2019) with machine-readable references and safety fields.",
   "type": "object",

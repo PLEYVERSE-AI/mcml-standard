@@ -2,8 +2,8 @@
 
 **An open, machine-readable standard for AI governance documentation**
 
-[![Spec: CC BY 4.0](https://img.shields.io/badge/spec-CC%20BY%204.0-lightgrey.svg)](LICENSE-SPEC) [![Code: GPL-3.0](https://img.shields.io/badge/code-GPL--3.0-blue.svg)](LICENSE)
-[![Specification](https://img.shields.io/badge/spec-v1.1%20draft-blue)](schema/v1.1/)
+[![Spec: CC BY 4.0](https://img.shields.io/badge/spec-CC%20BY%204.0-lightgrey.svg)](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/LICENSE-SPEC) [![Code: GPL-3.0](https://img.shields.io/badge/code-GPL--3.0-blue.svg)](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/LICENSE)
+[![Specification](https://img.shields.io/badge/spec-v1.1%20draft-blue)](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/schema/v1.1/)
 [![Status](https://img.shields.io/badge/status-draft-orange)]()
 
 > **A unified standard for AI governance documentation — making safety and compliance claims checkable, not just stated.**
@@ -791,7 +791,7 @@ PASS examples/credit-scoring/interface-card.yaml (interface_card)
 PASS examples/credit-scoring/model-card.yaml (model_card)
 ```
 
-Cards are YAML or JSON files whose top-level key names the card type: `model_card`, `dataset_card`, `interface_card` or `agentic_governance_card`. The schemas are in [`schema/v1.1/`](schema/v1.1/) and can be used with any JSON Schema (draft 2020-12) validator.
+Cards are YAML or JSON files whose top-level key names the card type: `model_card`, `dataset_card`, `interface_card` or `agentic_governance_card`. The schemas are in [`schema/v1.1/`](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/schema/v1.1/) and can be used with any JSON Schema (draft 2020-12) validator.
 
 ### 3. Report framework evidence
 
@@ -833,7 +833,7 @@ DEPLOYMENT BLOCKED
 
 ### 5. Add the gate to CI/CD
 
-[`.github/workflows/validate.yml`](.github/workflows/validate.yml) runs the gate on every push. To use it in your own pipeline:
+[`.github/workflows/validate.yml`](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/.github/workflows/validate.yml) runs the gate on every push. To use it in your own pipeline:
 
 ```yaml
 - run: pip install -r requirements.txt
@@ -844,9 +844,9 @@ DEPLOYMENT BLOCKED
 
 | Folder | What it shows |
 |--------|---------------|
-| [`examples/credit-scoring/`](examples/credit-scoring/) | Complete four-card stack for a credit model and a loan agent; passes the gate |
-| [`examples/clinical-alert-agent/`](examples/clinical-alert-agent/) | Synthetic healthcare stack: an agent that may page a rapid response team only after charge-nurse approval; passes the gate |
-| [`examples/blocked-deployment/`](examples/blocked-deployment/) | Incomplete stack the gate refuses |
+| [`examples/credit-scoring/`](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/examples/credit-scoring/) | Complete four-card stack for a credit model and a loan agent; passes the gate |
+| [`examples/clinical-alert-agent/`](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/examples/clinical-alert-agent/) | Synthetic healthcare stack: an agent that may page a rapid response team only after charge-nurse approval; passes the gate |
+| [`examples/blocked-deployment/`](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/examples/blocked-deployment/) | Incomplete stack the gate refuses |
 
 ---
 
@@ -894,7 +894,7 @@ analysis = IncidentInvestigator().analyze_incident(
 
 ### 5. Runtime Enforcement for Agents (in development)
 
-The Agentic Governance Card declares what an agent may do. The next step is enforcing it at runtime, without relying on the agent's cooperation: a gateway outside the agent's runtime checks each MCP tool call against the card before forwarding it, and writes a tamper-evident record linking the agent version, card version, gateway decision and tool receipt. Test cases under development, using the synthetic [`clinical-alert-agent`](examples/clinical-alert-agent/) workflow:
+The Agentic Governance Card declares what an agent may do. The next step is enforcing it at runtime, without relying on the agent's cooperation: a gateway outside the agent's runtime checks each MCP tool call against the card before forwarding it, and writes a tamper-evident record linking the agent version, card version, gateway decision and tool receipt. Test cases under development, using the synthetic [`clinical-alert-agent`](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/examples/clinical-alert-agent/) workflow:
 
 - an approved tool call
 - a tool call after human approval is withdrawn
@@ -908,10 +908,10 @@ Known limit: enforcement covers declared limits only. An action the card permits
 ## Documentation
 
 - **Specification overview**: this README
-- **Detailed specification draft**: [`docs/mcml-spec.md`](docs/mcml-spec.md)
-- **JSON Schemas**: [`schema/v1.1/`](schema/v1.1/)
-- **Example cards**: [`examples/`](examples/)
-- **Validator**: [`tools/mcml.py`](tools/mcml.py)
+- **Detailed specification draft**: [`docs/mcml-spec.md`](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/docs/mcml-spec.md)
+- **JSON Schemas**: [`schema/v1.1/`](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/schema/v1.1/)
+- **Example cards**: [`examples/`](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/examples/)
+- **Validator**: [`tools/mcml.py`](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/tools/mcml.py)
 - **Website**: [mcml-standard.org](https://mcml-standard.org)
 
 ---
@@ -920,10 +920,10 @@ Known limit: enforcement covers declared limits only. An action the card permits
 
 ### MCML v1.1 Schemas (JSON Schema, draft 2020-12)
 
-- **[Model Card Schema](schema/v1.1/model-card.schema.json)**
-- **[Dataset Card Schema](schema/v1.1/dataset-card.schema.json)**
-- **[Interface Card Schema](schema/v1.1/interface-card.schema.json)**
-- **[Agentic Governance Card Schema](schema/v1.1/agentic-governance-card.schema.json)**
+- **[Model Card Schema](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/schema/v1.1/model-card.schema.json)**
+- **[Dataset Card Schema](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/schema/v1.1/dataset-card.schema.json)**
+- **[Interface Card Schema](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/schema/v1.1/interface-card.schema.json)**
+- **[Agentic Governance Card Schema](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/schema/v1.1/agentic-governance-card.schema.json)**
 
 Schemas allow additional properties, so organizations can add their own fields while staying valid.
 
@@ -1059,7 +1059,7 @@ A: Agentic Governance Cards are optional. If you're not deploying autonomous age
 A: MCML is designed for AI/ML systems. For traditional software, use standard documentation practices (OpenAPI, README, etc.). However, Interface Cards can document any API.
 
 **Q: How do I migrate existing documentation to MCML?**
-A: Migration tooling is planned. Today, copy the relevant fields from your existing Model Card or Datasheet into the YAML structure shown in [`examples/`](examples/) and run `python tools/mcml.py validate` until it passes.
+A: Migration tooling is planned. Today, copy the relevant fields from your existing Model Card or Datasheet into the YAML structure shown in [`examples/`](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/examples/) and run `python tools/mcml.py validate` until it passes.
 
 **Q: What if I'm already using MLflow / Weights & Biases / other MLOps tools?**
 A: MCML is designed to sit alongside existing tools. Cards are plain YAML or JSON, so they can be generated from MLOps metadata by your own scripts; official MLflow and W&B integrations are planned.
@@ -1100,11 +1100,11 @@ MCML is open in the way Linux is: free to use and build on, with changes to the 
 
 ### Specification, schemas and documentation: CC BY 4.0
 
-The MCML specification, JSON Schemas, compliance mappings, example cards and documentation are licensed under **[Creative Commons Attribution 4.0 International](LICENSE-SPEC)**. Anyone, including commercial vendors, may use, adapt and implement the standard, provided they give credit and indicate changes.
+The MCML specification, JSON Schemas, compliance mappings, example cards and documentation are licensed under **[Creative Commons Attribution 4.0 International](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/LICENSE-SPEC)**. Anyone, including commercial vendors, may use, adapt and implement the standard, provided they give credit and indicate changes.
 
 ### Code: GPL-3.0, or a commercial license
 
-The code in this repository (`tools/` and any future SDKs, gateway and reference implementation code) is licensed under the **[GNU General Public License v3.0 or later](LICENSE)**. You may use it for any purpose, including commercially. If you distribute modified versions, you must release them under the same license.
+The code in this repository (`tools/` and any future SDKs, gateway and reference implementation code) is licensed under the **[GNU General Public License v3.0 or later](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/LICENSE)**. You may use it for any purpose, including commercially. If you distribute modified versions, you must release them under the same license.
 
 Organizations that want to embed or distribute the code in proprietary products without GPL obligations can obtain a **commercial license**: contact [lanre@pleyverse.com](mailto:lanre@pleyverse.com).
 
