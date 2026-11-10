@@ -207,6 +207,17 @@ def safety_gate(cards, require_agent: bool) -> list[str]:
             issues.append(f"{path}: enforcement.audit_log.tamper_evident must be true")
         if not a.get("kill_switch", {}).get("tested"):
             issues.append(f"{path}: kill_switch has no recorded test date")
+        # Runtime safety extension (draft): only checked when declared.
+        iso = a.get("enforcement", {}).get("gateway_isolation")
+        if iso is not None:
+            if not iso.get("runs_outside_agent_runtime"):
+                issues.append(f"{path}: enforcement runs inside the agent runtime, so it depends on the agent's cooperation")
+            if iso.get("tool_credentials_held_by") == "agent":
+                issues.append(f"{path}: the agent holds tool credentials, so it can bypass the gateway")
+        if a.get("kill_switch", {}).get("mechanism") == "in_band_signal":
+            issues.append(f"{path}: kill_switch relies on an in-band signal the agent could ignore; use out_of_band_revocation")
+        if a.get("provenance_verification", {}).get("on_mismatch") == "log_only":
+            issues.append(f"{path}: provenance mismatch is only logged; an unapproved model would keep running")
     return issues
 
 

@@ -8,6 +8,14 @@ agentic_governance_card:
   description: "Drafts deterioration alerts and sends them only after charge-nurse approval"
   model_ref: "model://deterioration_risk_model/1.0.0"
 
+  # Signed at approval; the gateway refuses to load an unsigned or altered card.
+  card_signature:
+    algorithm: ed25519
+    value: "ILLUSTRATIVE-SIGNATURE"
+    signed_by: "Clinical AI Governance Committee"
+    signed_at: "2026-11-05"
+    card_digest: "sha256:10492ff948768846aea49b7a99e210cb7111cd600724b9394c13c7454e50112d"   # illustrative
+
   identity:
     agent_id: "agent://clinical/alert/0.1.0"
     authentication: "Workload identity issued per deployment; credentials held by the gateway, not the agent"
@@ -30,7 +38,16 @@ agentic_governance_card:
         requires_human_approval: true
         max_calls_per_application: 1
         permission_ttl: "PT5M"
+        argument_schema:          # the gateway blocks calls whose arguments don't match
+          type: object
+          required: [patient_ref, approval_id, message]
+          additionalProperties: false
+          properties:
+            patient_ref: {type: string, pattern: "^pt-[0-9]{6}$"}
+            approval_id: {type: string, minLength: 1}
+            message: {type: string, maxLength: 280}
     standing_access: none
+    unknown_tool_policy: deny
     forbidden_actions:
       - send_alert_without_approval
       - modify_patient_record
@@ -40,12 +57,30 @@ agentic_governance_card:
     policy_engine: "MCP tool gateway (outside the agent runtime)"
     enforcement_point: "Gateway, before each MCP tool call is forwarded"
     violation_behavior: "Block call, log event, notify charge nurse"
+    gateway_isolation:
+      runs_outside_agent_runtime: true
+      tool_credentials_held_by: gateway
+      direct_tool_access_blocked_by: "Network policy: tool endpoints accept connections only from the gateway"
+      tool_receipts: true
     audit_log:
       captures: [agent_version, card_version, origin_user, tool, arguments_hash, approval_id, decision, tool_receipt, timestamp]
       retention_days: 2555
       tamper_evident: true
 
   kill_switch:
+    mechanism: out_of_band_revocation
+    numeric_triggers:
+      - {metric: alerts_per_hour, operator: ">", threshold: 10, window: "PT1H"}
+      - {metric: blocked_calls, operator: ">=", threshold: 3, window: "PT10M"}
+      - {metric: unauthorized_scope_attempts, operator: ">=", threshold: 1}
+    manual_activation:
+      authorized_roles: [charge_nurse, house_supervisor]
+    enforcement_actions:
+      - revoke_credentials
+      - terminate_tool_sessions
+      - block_pending_calls
+      - route_to_human_review
+      - preserve_audit_state
     trigger_conditions:
       - "approval withdrawn for a pending alert"
       - "alerts_per_hour > 10"
@@ -53,6 +88,20 @@ agentic_governance_card:
     action: "Revoke agent credentials at the gateway, drop open tool sessions, route to manual workflow"
     tested: "2026-11-05"          # illustrative value
     tested_by: "Example SRE team"  # illustrative value
+
+  # The serving host attests the weights' hash; the gateway compares it with this list.
+  provenance_verification:
+    model_ref: "model://deterioration_risk_model/1.0.0"
+    allowed_model_hashes:
+      - "sha256:17e1d711f601864db1d24997594094e5798d2c75c65976739a4e801422d2e301"   # illustrative
+    attestation_source: serving_host
+    check_frequency: "every session start and every 15 minutes"
+    on_mismatch: activate_kill_switch
+
+  adversarial_defenses:
+    payload_validation: true
+    injection_response: block_and_escalate
+    security_event_sink: "Gateway security log, separate from agent logs"
 
   human_oversight:
     model_card_ref: "model://deterioration_risk_model/1.0.0#human_oversight"

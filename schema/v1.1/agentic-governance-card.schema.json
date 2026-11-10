@@ -2,126 +2,401 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mcml-standard.org/schema/v1.1/agentic-governance-card.schema.json",
   "title": "MCML Agentic Governance Card",
-  "description": "Governance metadata for an AI agent or autonomous component (MCML v1.1 draft): identity, scoped authorization, delegation, runtime enforcement, kill switch and human oversight. Replaces the v1.0 agentic_card.",
+  "description": "Governance metadata for an AI agent or autonomous component (MCML v1.1 draft): identity, scoped authorization, delegation, runtime enforcement, kill switch and human oversight. Replaces the v1.0 agentic_card. Runtime safety fields (card_signature, gateway_isolation, argument_schema, structured kill-switch triggers, provenance_verification, adversarial_defenses) are a draft extension for the MCML runtime enforcement gateway, which is in development.",
   "type": "object",
-  "required": ["agentic_governance_card"],
+  "required": [
+    "agentic_governance_card"
+  ],
   "properties": {
     "agentic_governance_card": {
       "type": "object",
       "required": [
-        "schema_version", "agent_name", "agent_version", "identity", "autonomy",
-        "authorization", "enforcement", "kill_switch", "human_oversight"
+        "schema_version",
+        "agent_name",
+        "agent_version",
+        "identity",
+        "autonomy",
+        "authorization",
+        "enforcement",
+        "kill_switch",
+        "human_oversight"
       ],
       "properties": {
-        "schema_version": {"const": "1.1"},
-        "agent_name": {"type": "string", "minLength": 1},
-        "agent_version": {"type": "string", "minLength": 1},
-        "description": {"type": "string"},
-        "last_verified": {"type": "string"},
-        "model_ref": {"type": "string", "pattern": "^model://"},
+        "schema_version": {
+          "const": "1.1"
+        },
+        "agent_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "agent_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "last_verified": {
+          "type": "string"
+        },
+        "model_ref": {
+          "type": "string",
+          "pattern": "^model://"
+        },
         "identity": {
           "type": "object",
-          "required": ["agent_id", "owner"],
+          "required": [
+            "agent_id",
+            "owner"
+          ],
           "properties": {
-            "agent_id": {"type": "string", "pattern": "^agent://"},
-            "authentication": {"type": "string"},
-            "credential_rotation": {"type": "string"},
-            "owner": {"type": "string", "minLength": 1}
+            "agent_id": {
+              "type": "string",
+              "pattern": "^agent://"
+            },
+            "authentication": {
+              "type": "string"
+            },
+            "credential_rotation": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "autonomy": {
           "type": "object",
-          "required": ["level"],
+          "required": [
+            "level"
+          ],
           "properties": {
-            "level": {"enum": ["assistive", "semi_autonomous", "autonomous"]},
-            "decision_authority": {"type": "object", "additionalProperties": {"type": ["number", "string", "boolean"]}}
+            "level": {
+              "enum": [
+                "assistive",
+                "semi_autonomous",
+                "autonomous"
+              ]
+            },
+            "decision_authority": {
+              "type": "object",
+              "additionalProperties": {
+                "type": [
+                  "number",
+                  "string",
+                  "boolean"
+                ]
+              }
+            }
           }
         },
         "authorization": {
           "type": "object",
-          "required": ["tools", "forbidden_actions"],
+          "required": [
+            "tools",
+            "forbidden_actions"
+          ],
           "properties": {
             "tools": {
               "type": "array",
               "minItems": 1,
               "items": {
                 "type": "object",
-                "required": ["name", "scopes"],
+                "required": [
+                  "name",
+                  "scopes"
+                ],
                 "properties": {
-                  "name": {"type": "string"},
-                  "scopes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-                  "max_calls_per_application": {"type": "integer", "minimum": 0},
-                  "permission_ttl": {"type": "string", "pattern": "^P"},
-                  "requires_human_approval": {"type": "boolean"}
+                  "name": {
+                    "type": "string"
+                  },
+                  "scopes": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "max_calls_per_application": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "permission_ttl": {
+                    "type": "string",
+                    "pattern": "^P"
+                  },
+                  "requires_human_approval": {
+                    "type": "boolean"
+                  },
+                  "argument_schema": {
+                    "description": "JSON Schema the gateway applies to this tool's call arguments. Calls whose arguments do not validate are blocked.",
+                    "type": "object"
+                  }
                 }
               }
             },
-            "standing_access": {"enum": ["none", "limited", "full"]},
-            "forbidden_actions": {"type": "array", "items": {"type": "string"}}
+            "standing_access": {
+              "enum": [
+                "none",
+                "limited",
+                "full"
+              ]
+            },
+            "forbidden_actions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "unknown_tool_policy": {
+              "enum": [
+                "deny",
+                "escalate"
+              ],
+              "description": "What the gateway does with a call to a tool not listed in tools."
+            }
           }
         },
         "delegation": {
           "type": "object",
           "properties": {
-            "max_hops": {"type": "integer", "minimum": 0},
-            "requires_origin_user": {"type": "boolean"},
-            "chain_recorded": {"type": "boolean"},
-            "permitted_downstream_agents": {"type": "array", "items": {"type": "string"}},
-            "prohibited_downstream_agents": {"type": "array", "items": {"type": "string"}}
+            "max_hops": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "requires_origin_user": {
+              "type": "boolean"
+            },
+            "chain_recorded": {
+              "type": "boolean"
+            },
+            "permitted_downstream_agents": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "prohibited_downstream_agents": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         },
         "interoperability": {
           "type": "object",
           "properties": {
-            "mcp": {"$ref": "#/$defs/protocol"},
-            "a2a": {"$ref": "#/$defs/protocol"},
-            "upstream_spec_links": {"type": "array", "items": {"type": "string"}}
+            "mcp": {
+              "$ref": "#/$defs/protocol"
+            },
+            "a2a": {
+              "$ref": "#/$defs/protocol"
+            },
+            "upstream_spec_links": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         },
         "enforcement": {
           "type": "object",
-          "required": ["enforcement_point", "violation_behavior", "audit_log"],
+          "required": [
+            "enforcement_point",
+            "violation_behavior",
+            "audit_log"
+          ],
           "properties": {
-            "policy_engine": {"type": "string"},
-            "enforcement_point": {"type": "string", "minLength": 1},
-            "violation_behavior": {"type": "string", "minLength": 1},
+            "policy_engine": {
+              "type": "string"
+            },
+            "enforcement_point": {
+              "type": "string",
+              "minLength": 1
+            },
+            "violation_behavior": {
+              "type": "string",
+              "minLength": 1
+            },
             "audit_log": {
               "type": "object",
-              "required": ["captures", "tamper_evident"],
+              "required": [
+                "captures",
+                "tamper_evident"
+              ],
               "properties": {
-                "captures": {"type": "array", "items": {"type": "string"}},
-                "retention_days": {"type": "integer", "minimum": 0},
-                "tamper_evident": {"type": "boolean"}
+                "captures": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "retention_days": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "tamper_evident": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "gateway_isolation": {
+              "description": "How the enforcement point is separated from the agent, so enforcement does not depend on the agent's cooperation.",
+              "type": "object",
+              "required": [
+                "runs_outside_agent_runtime",
+                "tool_credentials_held_by"
+              ],
+              "properties": {
+                "runs_outside_agent_runtime": {
+                  "type": "boolean"
+                },
+                "tool_credentials_held_by": {
+                  "enum": [
+                    "gateway",
+                    "agent"
+                  ]
+                },
+                "direct_tool_access_blocked_by": {
+                  "type": "string",
+                  "description": "Network or host control that stops the agent reaching tools except through the gateway"
+                },
+                "tool_receipts": {
+                  "type": "boolean",
+                  "description": "Tools return a receipt of what executed, recorded alongside the gateway decision"
+                }
               }
             }
           }
         },
         "kill_switch": {
           "type": "object",
-          "required": ["trigger_conditions", "action"],
+          "required": [
+            "trigger_conditions",
+            "action"
+          ],
           "properties": {
-            "trigger_conditions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
-            "action": {"type": "string", "minLength": 1},
-            "tested": {"type": "string"},
-            "tested_by": {"type": "string"},
-            "rollback_procedure_ref": {"type": "string"}
+            "trigger_conditions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "action": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tested": {
+              "type": "string"
+            },
+            "tested_by": {
+              "type": "string"
+            },
+            "rollback_procedure_ref": {
+              "type": "string"
+            },
+            "mechanism": {
+              "enum": [
+                "out_of_band_revocation",
+                "in_band_signal"
+              ],
+              "description": "out_of_band_revocation: the gateway revokes credentials without the agent's participation."
+            },
+            "numeric_triggers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "metric",
+                  "operator",
+                  "threshold"
+                ],
+                "properties": {
+                  "metric": {
+                    "type": "string"
+                  },
+                  "operator": {
+                    "enum": [
+                      ">",
+                      ">=",
+                      "<",
+                      "<=",
+                      "=="
+                    ]
+                  },
+                  "threshold": {
+                    "type": "number"
+                  },
+                  "window": {
+                    "type": "string",
+                    "pattern": "^P"
+                  }
+                }
+              }
+            },
+            "manual_activation": {
+              "type": "object",
+              "properties": {
+                "authorized_roles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "max_activation_latency_seconds": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            },
+            "enforcement_actions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "enum": [
+                  "revoke_credentials",
+                  "terminate_tool_sessions",
+                  "block_pending_calls",
+                  "route_to_human_review",
+                  "preserve_audit_state",
+                  "notify_owner"
+                ]
+              }
+            }
           }
         },
         "human_oversight": {
           "type": "object",
-          "required": ["escalation_rules"],
+          "required": [
+            "escalation_rules"
+          ],
           "properties": {
-            "model_card_ref": {"type": "string"},
+            "model_card_ref": {
+              "type": "string"
+            },
             "escalation_rules": {
               "type": "array",
               "minItems": 1,
               "items": {
                 "type": "object",
-                "required": ["condition", "action"],
+                "required": [
+                  "condition",
+                  "action"
+                ],
                 "properties": {
-                  "condition": {"type": "string"},
-                  "action": {"type": "string"},
-                  "sla": {"type": "string"}
+                  "condition": {
+                    "type": "string"
+                  },
+                  "action": {
+                    "type": "string"
+                  },
+                  "sla": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -130,19 +405,138 @@
         "monitoring": {
           "type": "object",
           "properties": {
-            "model_card_ref": {"type": "string"},
-            "action_logging_level": {"enum": ["none", "errors", "decisions", "all"]}
+            "model_card_ref": {
+              "type": "string"
+            },
+            "action_logging_level": {
+              "enum": [
+                "none",
+                "errors",
+                "decisions",
+                "all"
+              ]
+            }
           }
         },
         "threat_coverage": {
           "type": "object",
           "properties": {
-            "framework": {"type": "string"},
-            "reviewed_categories": {"type": "array", "items": {"type": "string"}},
-            "last_reviewed": {"type": "string"}
+            "framework": {
+              "type": "string"
+            },
+            "reviewed_categories": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "last_reviewed": {
+              "type": "string"
+            }
           }
         },
-        "incident_refs": {"type": "array", "items": {"type": "string"}}
+        "incident_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "card_signature": {
+          "description": "Signature over the card, so the gateway can verify it enforces the approved version.",
+          "type": "object",
+          "required": [
+            "algorithm",
+            "value",
+            "signed_by"
+          ],
+          "properties": {
+            "algorithm": {
+              "enum": [
+                "ed25519",
+                "ecdsa-p256",
+                "rsa-pss-sha256"
+              ]
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "signed_by": {
+              "type": "string"
+            },
+            "signed_at": {
+              "type": "string"
+            },
+            "card_digest": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            }
+          }
+        },
+        "provenance_verification": {
+          "description": "Model integrity check: the serving host attests the hash of the weights in use and the gateway compares it with the approved list. The gateway cannot inspect weights itself.",
+          "type": "object",
+          "required": [
+            "allowed_model_hashes",
+            "attestation_source",
+            "on_mismatch"
+          ],
+          "properties": {
+            "model_ref": {
+              "type": "string",
+              "pattern": "^model://"
+            },
+            "allowed_model_hashes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              }
+            },
+            "attestation_source": {
+              "enum": [
+                "serving_host",
+                "model_registry",
+                "hardware_attestation"
+              ]
+            },
+            "check_frequency": {
+              "type": "string"
+            },
+            "on_mismatch": {
+              "enum": [
+                "activate_kill_switch",
+                "block_and_escalate",
+                "log_only"
+              ]
+            }
+          }
+        },
+        "adversarial_defenses": {
+          "type": "object",
+          "properties": {
+            "payload_validation": {
+              "type": "boolean",
+              "description": "Gateway validates call arguments against each tool's argument_schema"
+            },
+            "injection_response": {
+              "enum": [
+                "block_and_log",
+                "block_and_escalate",
+                "activate_kill_switch"
+              ]
+            },
+            "security_event_sink": {
+              "type": "string",
+              "description": "Where blocked attempts are recorded, separate from the agent's own logs"
+            },
+            "red_team_tested": {
+              "type": "string",
+              "description": "Date of the most recent adversarial test"
+            }
+          }
+        }
       }
     }
   },
@@ -150,10 +544,18 @@
     "protocol": {
       "type": "object",
       "properties": {
-        "supported": {"type": "boolean"},
-        "spec_version_range": {"type": "string"},
-        "auth_profile": {"type": "string"},
-        "agent_card_signed": {"type": "boolean"}
+        "supported": {
+          "type": "boolean"
+        },
+        "spec_version_range": {
+          "type": "string"
+        },
+        "auth_profile": {
+          "type": "string"
+        },
+        "agent_card_signed": {
+          "type": "boolean"
+        }
       }
     }
   }
