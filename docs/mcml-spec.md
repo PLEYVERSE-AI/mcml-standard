@@ -2,7 +2,7 @@
 
 **An open, machine-readable standard for AI governance documentation**
 
-[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Spec: CC BY 4.0](https://img.shields.io/badge/spec-CC%20BY%204.0-lightgrey.svg)](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/LICENSE-SPEC) [![Code: GPL-3.0](https://img.shields.io/badge/code-GPL--3.0-blue.svg)](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/LICENSE)
 [![Specification](https://img.shields.io/badge/spec-v1.1%20draft-blue)](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/schema/v1.1/)
 [![Status](https://img.shields.io/badge/status-draft-orange)]()
 
@@ -1090,33 +1090,25 @@ A: Dataset Cards can document data characteristics (biases, quality) without exp
 
 ## Patents
 
-The two-layer architecture with foreign key relationships for AI governance is **patent pending**. Commercial use of that architecture requires a license. The MCML specification is released under CC BY 4.0 and can be implemented without a patent license.
+The two-layer architecture with foreign key relationships for AI governance is **patent pending**. Implementing the MCML specification and schemas does not require a patent license.
 
 ---
 
 ## License
 
-### MCML Specification
+MCML is open in the way Linux is: free to use and build on, with changes to the code shared back, and commercial licenses available.
 
-The MCML standard specification (schemas, documentation, compliance mappings) is released under **Creative Commons Attribution 4.0 International (CC BY 4.0)**.
+### Specification, schemas and documentation: CC BY 4.0
 
-You are free to:
-- Use MCML in commercial and non-commercial projects
-- Modify and extend MCML schemas
-- Create tools and implementations
+The MCML specification, JSON Schemas, compliance mappings, example cards and documentation are licensed under **[Creative Commons Attribution 4.0 International](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/LICENSE-SPEC)**. Anyone, including commercial vendors, may use, adapt and implement the standard, provided they give credit and indicate changes.
 
-You must:
-- Give appropriate credit to MCML
-- Indicate if changes were made
+### Code: GPL-3.0, or a commercial license
 
-### Reference Implementation Code
+The code in this repository (`tools/` and any future SDKs, gateway and reference implementation code) is licensed under the **[GNU General Public License v3.0 or later](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/LICENSE)**. You may use it for any purpose, including commercially. If you distribute modified versions, you must release them under the same license.
 
-The reference implementation code (two-layer architecture, SDKs, tools) is dual-licensed:
+Organizations that want to embed or distribute the code in proprietary products without GPL obligations can obtain a **commercial license**: contact [lanre@pleyverse.com](mailto:lanre@pleyverse.com).
 
-- **Open Source License**: MIT License (for non-commercial use and evaluation)
-- **Commercial License**: Contact [licensing@mcml-standard.org](mailto:licensing@mcml-standard.org) for production use of the patent-pending two-layer architecture
-
-Academic and non-profit use is permitted under the MIT License.
+Contributions are accepted under the same terms, so the project can continue to offer both licenses.
 
 ---
 
