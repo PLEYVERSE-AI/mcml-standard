@@ -1,0 +1,31 @@
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='4' y='4' width='22' height='22' rx='5' fill='none' stroke='%238fb3cf' stroke-width='2'/%3E%3Crect x='9' y='9' width='22' height='22' rx='5' fill='white' stroke='%233f7cab' stroke-width='2'/%3E%3Crect x='14' y='14' width='22' height='22' rx='5' fill='%231d5c8c'/%3E%3Cpath d='M19.5 25.5l3.5 3.5 7-7.5' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  .mcml-header { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,0.94);
+                 backdrop-filter: saturate(180%) blur(8px); -webkit-backdrop-filter: saturate(180%) blur(8px);
+                 border-bottom: 1px solid #e3e8ee; }
+  .mcml-header-inner { max-width: 1012px; margin: 0 auto; padding: 12px 16px;
+                       display: flex; align-items: center; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; }
+  .mcml-brand { display: flex; align-items: center; gap: 10px; text-decoration: none !important; color: #17202b; }
+  .mcml-mark { flex: none; }
+  .mcml-wordmark { display: flex; flex-direction: column; line-height: 1.15; }
+  .mcml-name { font-size: 19px; font-weight: 700; letter-spacing: 0.06em; color: #17202b; }
+  .mcml-tagline { font-size: 11.5px; color: #5b6776; letter-spacing: 0.01em; }
+  .mcml-nav { display: flex; align-items: center; gap: 2px; font-size: 14.5px; }
+  .mcml-nav a { color: #3d4855; text-decoration: none !important; padding: 7px 12px; border-radius: 999px;
+                font-weight: 500; white-space: nowrap; transition: background-color .15s, color .15s; }
+  .mcml-nav a:hover { background: #f0f4f8; color: #17202b; }
+  .mcml-nav a[aria-current="page"] { background: #e6eff7; color: #1d5c8c; font-weight: 600; }
+  .mcml-nav a:focus-visible { outline: 2px solid #1d5c8c; outline-offset: 2px; }
+  .mcml-nav a.mcml-gh { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px;
+                        border: 1px solid #d0d7de; padding: 6px 12px; }
+  .mcml-nav a.mcml-gh:hover { border-color: #1d5c8c; background: #ffffff; color: #1d5c8c; }
+  @media (max-width: 860px) {
+    .mcml-header { position: static; }
+    .mcml-nav { width: 100%; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none;
+                -webkit-mask-image: linear-gradient(to right, #000 82%, transparent);
+                mask-image: linear-gradient(to right, #000 82%, transparent); }
+    .mcml-nav::-webkit-scrollbar { display: none; }
+    .mcml-nav a.mcml-gh { margin-left: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) { .mcml-nav a { transition: none; } }
+</style>
