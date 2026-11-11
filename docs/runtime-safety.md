@@ -65,6 +65,39 @@ MCML already turns safety claims into structured cards that a pre-deployment gat
 
 ---
 
+## Where this fits: the four-card chain
+
+The Agentic Governance Card is one of four linked MCML cards. Each points to the one before it, so the gateway can trace any agent action back through the tool and the model to the data that trained it:
+
+**Dataset Card** (data hash, signer, baseline statistics, canary probes) → trains → **Model Card** (weight hash, training lineage, evaluation thresholds, device scope) → served by → **Interface Card** (declared endpoint, gateway-only credential, signed receipts) → used by → **Agentic Governance Card** (allowed tools, approvals, argument schemas, kill-switch rules).
+
+A failed check anywhere in the chain can stop the agent. See [Our approach](https://mcml-standard.org/docs/approach.html) for the three layers (enforcement gateway, provenance and model telemetry, verifiable governance chain) and how internal-model signals are designed to plug in later.
+
+## MCP alone vs MCP with MCML
+
+MCP standardizes how agents connect to tools and authorize against them. It carries no governance data. MCML adds that layer without changing MCP.
+
+| Question | MCP alone | MCP with MCML |
+| --- | --- | --- |
+| Which tools may this agent call? | Server-level authorization scopes | Per-agent allowed tools and forbidden actions from a signed card |
+| Is human approval valid right now? | Up to each host application | Checked on every call; withdrawal takes effect immediately |
+| Can we stop the agent without its cooperation? | Revoke tokens server by server | One kill switch revokes the gateway's credentials for every tool |
+| Is the model the approved one? | Not visible | Attested weight hash checked against the Model Card |
+| Was it trained on approved data? | Not visible | Dataset Card lineage and data hash |
+| What happens to work in flight when something upstream changes? | Calls continue | Affected calls blocked, approvals voided, outputs flagged |
+| Can a reviewer reconstruct what happened? | Depends on each server's logs | Hash-chained evidence linking version, approval, decision and receipt |
+
+Use case M will test this side by side; see [Use cases](https://mcml-standard.org/docs/use-cases.html).
+
+## Kill switch and targeted containment
+
+Not every problem should stop everything. MCML has two responses, both enforced by the gateway without the agent's participation:
+
+- **Global kill switch:** for tampering or loss of control (unapproved model, poisoned data caught by canaries, forbidden actions, bypass attempts, an operator's command). The gateway revokes its credentials and refuses every later call.
+- **Targeted containment:** for upstream changes that affect part of the work (a patient revokes consent, an input no longer matches its declared contract, a software change falls outside a certified scope). Only the affected patient, input or version is stopped; pending approvals tied to it are voided and outputs since the change are flagged.
+
+Only the governance owner can reset either, by signing a corrected chain.
+
 ## The card fields
 
 These fields extend the v1.1 Agentic Governance Card. All are optional in the schema. When present, the validator checks them and the deployment gate blocks configurations that would let the agent bypass enforcement.
@@ -170,6 +203,7 @@ Stating limits is part of the design:
 | Reference enforcement gateway for MCP | **Prototype available** in [`gateway/`](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/gateway), including a live-demo mode for real MCP agents |
 | Results for the test scenarios | **7 of 7 pass** in a synthetic environment ([results](https://mcml-standard.org/gateway/RESULTS.html)) |
 | Production pilot | **Seeking partners** |
+| Intrinsic (internal-model) signals | **Designed for, not used**: reserved `intrinsic_telemetry` field in the Model Card and a gateway extension point, checked with a mock provider |
 | Proposal of the evidence format as an MCP extension | **Planned**, if testing supports it |
 
 ## Get involved

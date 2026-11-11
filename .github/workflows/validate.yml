@@ -41,3 +41,6 @@ jobs:
       - name: Runtime safety scenarios (prototype gateway)
         working-directory: gateway
         run: python -m mcml_gateway scenarios --out /tmp/RESULTS.md
+      - name: Intrinsic-signal extension point (mock provider)
+        working-directory: gateway
+        run: python -m mcml_gateway.hooks_check
