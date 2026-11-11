@@ -62,6 +62,15 @@ class Attestor(Protocol):
     def attest(self) -> dict: ...
 
 
+class SignalProvider(Protocol):
+    """Extension point for internal-model (mechanistic) signals. NOT USED by default.
+
+    Returns {signal_id: value} for the signals the Model Card declares. A real
+    provider needs self-hosted weights (activations cannot be read through a
+    remote API). The gateway acts only on signals the card marks 'validated'."""
+    def signals(self, tool: str, arguments: dict, signal_ids: list[str]) -> dict[str, float]: ...
+
+
 class UpstreamRefused(Exception):
     pass
 
@@ -103,6 +112,8 @@ class Gateway:
     ledger: Ledger = field(default_factory=Ledger)
     clock: Clock = utcnow
     origin_user: str = "unknown"
+    model_card: dict | None = None          # optional; enables intrinsic_telemetry if declared
+    signal_provider: SignalProvider | None = None  # optional extension point; unused by default
 
     def __post_init__(self):
         # Refuse to start on an unsigned or altered card.
@@ -206,6 +217,22 @@ class Gateway:
             return False, "attested model hash is not on the approved list", att.get("weights_hash")
         return True, "attested model hash approved", att.get("weights_hash")
 
+    # ------------------------------------------------------------ intrinsic signals (extension point)
+
+    def _check_intrinsic(self, tool: str, args: dict):
+        tel = (self.model_card or {}).get("intrinsic_telemetry") or {}
+        if tel.get("status") != "validated" or not self.signal_provider:
+            return None
+        rules = [r for r in tel.get("signals", []) if tool in r.get("applies_to_tools", [])]
+        if not rules:
+            return None
+        values = self.signal_provider.signals(tool, args, [r["id"] for r in rules])
+        for r in rules:
+            v = values.get(r["id"])
+            if v is not None and v >= r["threshold"]:
+                return r["id"], v, r
+        return None
+
     # ------------------------------------------------------------ the decision
 
     async def handle(self, tool: str, arguments: dict | None) -> Decision:
@@ -232,6 +259,19 @@ class Gateway:
             dec = block("provenance_verification", why, security=True, attested_model_hash=attested)
             if action == "activate_kill_switch":
                 self.activate_kill_switch(f"provenance: {why}")
+            return dec
+
+        # 2b. intrinsic signals (extension point; only 'validated' signals, only when a provider is attached)
+        sig = self._check_intrinsic(tool, args)
+        if sig:
+            sid, value, rule = sig
+            action = rule["on_trigger"]
+            dec = block("intrinsic_signal", f"signal {sid} = {value} crossed threshold {rule['threshold']}",
+                        security=True, attested_model_hash=attested, intrinsic_signal={"id": sid, "value": value})
+            if action == "activate_kill_switch":
+                self.activate_kill_switch(f"intrinsic signal {sid}")
+            elif action == "escalate":
+                self.ledger.append(self._base("escalated", reason=f"intrinsic signal {sid}", tool=tool))
             return dec
 
         # 3. declared tool, not forbidden

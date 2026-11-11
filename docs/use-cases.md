@@ -6,7 +6,7 @@ title: "MCML Use Cases"
 
 Each use case shows MCML cards driving runtime controls for AI agents, tested as automated scenarios. Together they show what it takes to make an agent's safety controls enforceable rather than documented: from the data a model was trained on, through the model and its interface, to every action the agent takes.
 
-We publish the full roadmap openly. A use case is marked **Done** only when it is built and its results are reproducible from this repository.
+We publish the full roadmap openly. A use case is marked **Done** only when it is built and its results are reproducible from this repository. **Research** means an open question we are designing for, not a planned build.
 
 ## Roadmap
 
@@ -20,6 +20,7 @@ We publish the full roadmap openly. A use case is marked **Done** only when it i
 | C | Patient consent revoked mid-workflow | An upstream consent change stops in-flight actions and flags affected data and models | Dataset, Model, Agentic | Planned |
 | D | An agent changes a function of certified medical device software | An out-of-scope change suspends clinical use, opens an audit and rolls back | Model, Interface, Agentic | Planned |
 | E | Upstream lab data changes | The input contract catches the change; outputs made since are flagged | Dataset, Interface, Model | Planned |
+| I | Intrinsic signals as gateway triggers | Validated internal-model signals (for example, probes) feeding the same enforcement, for self-hosted models | Model, Agentic | Research |
 
 ## Done
 
@@ -72,5 +73,11 @@ An automated agent changes an alert threshold or adds an input outside the chang
 ### E. Upstream lab data changes
 
 A lab system starts reporting a value in different units. The input contract in the Dataset and Interface cards must reject out-of-contract inputs, flag scores produced since the change, and hold alerts for a human.
+
+## Research
+
+### I. Intrinsic signals as gateway triggers
+
+MCML treats models as black boxes today. As interpretability research matures, validated signals from inside a self-hosted model, such as a probe for divergence between a model's stated and internal confidence, could become one more input to the gateway, checked only for high-consequence actions. The Model Card already reserves an `intrinsic_telemetry` field for this, and the gateway has a matching extension point. We would enable a signal only after it is validated on held-out data with published error rates and measured latency, and extrinsic enforcement would stay in place regardless. See [Our approach](https://mcml-standard.org/docs/approach.html).
 
 **Want to pilot one of these with us, or attack the gateway?** Open an [issue](https://github.com/PLEYVERSE-AI/mcml-standard/issues) or contact [lanre@pleyverse.com](mailto:lanre@pleyverse.com).

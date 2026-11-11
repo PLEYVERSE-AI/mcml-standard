@@ -63,3 +63,8 @@ model_card:
     accepted_by: "Chief Medical Information Officer"
     accepted_on: "2026-10-15"
     review_due: "2027-01-15"
+
+  # Reserved for internal-model signals. Not used: MCML treats the model as a black box today.
+  intrinsic_telemetry:
+    status: not_used
+    access: self_hosted_weights

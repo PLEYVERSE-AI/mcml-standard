@@ -4,123 +4,392 @@
   "title": "MCML Model Card",
   "description": "Governance metadata for an ML model (MCML v1.1 draft). Extends Google Model Cards (Mitchell et al., 2019) with machine-readable references and safety fields.",
   "type": "object",
-  "required": ["model_card"],
+  "required": [
+    "model_card"
+  ],
   "properties": {
     "model_card": {
       "type": "object",
-      "required": ["model_name", "version", "intended_use", "limitations", "responsible_team"],
+      "required": [
+        "model_name",
+        "version",
+        "intended_use",
+        "limitations",
+        "responsible_team"
+      ],
       "properties": {
-        "model_name": {"type": "string", "minLength": 1},
-        "version": {"type": ["string", "number"]},
-        "intended_use": {"type": "string", "minLength": 1},
-        "out_of_scope_uses": {"type": "array", "items": {"type": "string"}},
-        "training_dataset_ref": {"$ref": "#/$defs/card_ref"},
-        "validation_dataset_ref": {"$ref": "#/$defs/card_ref"},
+        "model_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "intended_use": {
+          "type": "string",
+          "minLength": 1
+        },
+        "out_of_scope_uses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "training_dataset_ref": {
+          "$ref": "#/$defs/card_ref"
+        },
+        "validation_dataset_ref": {
+          "$ref": "#/$defs/card_ref"
+        },
         "performance_metrics": {
           "type": "object",
-          "properties": {"primary_metric": {"type": "string"}},
-          "additionalProperties": {"type": ["number", "string"]}
+          "properties": {
+            "primary_metric": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": {
+            "type": [
+              "number",
+              "string"
+            ]
+          }
         },
-        "fairness_metrics": {"type": "object", "additionalProperties": {"type": "number"}},
-        "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "fairness_metrics": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
         "ethical_considerations": {
           "type": "object",
           "properties": {
-            "high_risk_groups": {"type": "array", "items": {"type": "string"}},
-            "mitigation_strategies": {"type": "array", "items": {"type": "string"}}
+            "high_risk_groups": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "mitigation_strategies": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         },
-        "responsible_team": {"type": "string", "minLength": 1},
-        "contact_email": {"type": "string"},
+        "responsible_team": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contact_email": {
+          "type": "string"
+        },
         "nist_rmf_alignment": {
           "type": "object",
           "properties": {
-            "GOVERN": {"type": "string"},
-            "MAP": {"type": "string"},
-            "MEASURE": {"type": "string"},
-            "MANAGE": {"type": "string"}
+            "GOVERN": {
+              "type": "string"
+            },
+            "MAP": {
+              "type": "string"
+            },
+            "MEASURE": {
+              "type": "string"
+            },
+            "MANAGE": {
+              "type": "string"
+            }
           }
         },
         "failure_modes": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["id", "description", "severity"],
+            "required": [
+              "id",
+              "description",
+              "severity"
+            ],
             "properties": {
-              "id": {"type": "string"},
-              "description": {"type": "string"},
-              "severity": {"$ref": "#/$defs/level"},
-              "detection": {"type": "string"},
-              "mitigation_ref": {"type": "string"},
-              "residual_risk": {"$ref": "#/$defs/level"}
+              "id": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "severity": {
+                "$ref": "#/$defs/level"
+              },
+              "detection": {
+                "type": "string"
+              },
+              "mitigation_ref": {
+                "type": "string"
+              },
+              "residual_risk": {
+                "$ref": "#/$defs/level"
+              }
             }
           }
         },
         "evaluation_evidence": {
           "type": "object",
-          "required": ["evaluation_date", "metrics"],
+          "required": [
+            "evaluation_date",
+            "metrics"
+          ],
           "properties": {
-            "evaluation_date": {"type": "string"},
-            "test_dataset_ref": {"$ref": "#/$defs/card_ref"},
+            "evaluation_date": {
+              "type": "string"
+            },
+            "test_dataset_ref": {
+              "$ref": "#/$defs/card_ref"
+            },
             "metrics": {
               "type": "array",
               "minItems": 1,
               "items": {
                 "type": "object",
-                "required": ["metric", "threshold", "observed", "passed"],
+                "required": [
+                  "metric",
+                  "threshold",
+                  "observed",
+                  "passed"
+                ],
                 "properties": {
-                  "metric": {"type": "string"},
-                  "threshold": {"type": "number"},
-                  "observed": {"type": "number"},
-                  "passed": {"type": "boolean"}
+                  "metric": {
+                    "type": "string"
+                  },
+                  "threshold": {
+                    "type": "number"
+                  },
+                  "observed": {
+                    "type": "number"
+                  },
+                  "passed": {
+                    "type": "boolean"
+                  }
                 }
               }
             },
-            "report_uri": {"type": "string"}
+            "report_uri": {
+              "type": "string"
+            }
           }
         },
         "human_oversight": {
           "type": "object",
-          "required": ["oversight_model", "reviewer_role"],
+          "required": [
+            "oversight_model",
+            "reviewer_role"
+          ],
           "properties": {
-            "oversight_model": {"enum": ["human_in_the_loop", "human_on_the_loop", "human_in_command"]},
-            "reviewer_role": {"type": "string"},
-            "override_authority": {"type": "string"},
-            "review_triggers": {"type": "array", "items": {"type": "string"}},
-            "reviewer_training": {"type": "string"}
+            "oversight_model": {
+              "enum": [
+                "human_in_the_loop",
+                "human_on_the_loop",
+                "human_in_command"
+              ]
+            },
+            "reviewer_role": {
+              "type": "string"
+            },
+            "override_authority": {
+              "type": "string"
+            },
+            "review_triggers": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "reviewer_training": {
+              "type": "string"
+            }
           }
         },
         "monitoring_commitments": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["metric", "threshold", "action_on_breach", "owner"],
+            "required": [
+              "metric",
+              "threshold",
+              "action_on_breach",
+              "owner"
+            ],
             "properties": {
-              "metric": {"type": "string"},
-              "threshold": {"type": "number"},
-              "frequency": {"type": "string"},
-              "action_on_breach": {"type": "string"},
-              "owner": {"type": "string"}
+              "metric": {
+                "type": "string"
+              },
+              "threshold": {
+                "type": "number"
+              },
+              "frequency": {
+                "type": "string"
+              },
+              "action_on_breach": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string"
+              }
             }
           }
         },
         "risk_acceptance": {
           "type": "object",
-          "required": ["risk_category", "accepted_by", "accepted_on"],
+          "required": [
+            "risk_category",
+            "accepted_by",
+            "accepted_on"
+          ],
           "properties": {
-            "risk_category": {"enum": ["minimal", "limited", "high", "unacceptable"]},
-            "accepted_residual_risk": {"$ref": "#/$defs/level"},
-            "accepted_by": {"type": "string"},
-            "accepted_on": {"type": "string"},
-            "review_due": {"type": "string"}
+            "risk_category": {
+              "enum": [
+                "minimal",
+                "limited",
+                "high",
+                "unacceptable"
+              ]
+            },
+            "accepted_residual_risk": {
+              "$ref": "#/$defs/level"
+            },
+            "accepted_by": {
+              "type": "string"
+            },
+            "accepted_on": {
+              "type": "string"
+            },
+            "review_due": {
+              "type": "string"
+            }
           }
         },
-        "incident_refs": {"type": "array", "items": {"type": "string"}}
+        "incident_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "intrinsic_telemetry": {
+          "description": "RESERVED, v1.1 draft. Declares internal-model (mechanistic) signals that a gateway may use as additional triggers. The reference gateway treats models as black boxes and does not use these signals yet; the field exists so cards and gateways can adopt validated signals without a schema change. Requires self-hosted weights: activations cannot be read through a remote model API.",
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "not_used",
+                "research",
+                "validated"
+              ],
+              "description": "Only 'validated' signals may drive enforcement."
+            },
+            "access": {
+              "enum": [
+                "self_hosted_weights"
+              ],
+              "description": "Where activations are read from."
+            },
+            "signals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "purpose",
+                  "method",
+                  "threshold",
+                  "validation_evidence_ref",
+                  "on_trigger"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "purpose": {
+                    "type": "string",
+                    "description": "What the signal is meant to detect, e.g. divergence between stated and internal confidence"
+                  },
+                  "method": {
+                    "enum": [
+                      "linear_probe",
+                      "sae_feature",
+                      "activation_statistic",
+                      "other"
+                    ]
+                  },
+                  "layer": {
+                    "type": [
+                      "integer",
+                      "string"
+                    ]
+                  },
+                  "threshold": {
+                    "type": "number"
+                  },
+                  "validation_evidence_ref": {
+                    "type": "string",
+                    "description": "Held-out evaluation showing detection and false-positive rates"
+                  },
+                  "false_positive_rate": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "applies_to_tools": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Checked only for these high-consequence actions"
+                  },
+                  "on_trigger": {
+                    "enum": [
+                      "escalate",
+                      "block",
+                      "activate_kill_switch"
+                    ]
+                  },
+                  "added_latency_ms_p95": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "Measured cost of evaluating the signal"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
   "$defs": {
-    "card_ref": {"type": "string", "pattern": "^(model|dataset|interface|agent)://"},
-    "level": {"enum": ["low", "medium", "high", "critical"]}
+    "card_ref": {
+      "type": "string",
+      "pattern": "^(model|dataset|interface|agent)://"
+    },
+    "level": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ]
+    }
   }
 }
