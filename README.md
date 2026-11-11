@@ -16,6 +16,7 @@
 <li class="caution"><strong>Zero-Trust Tool Interception:</strong> Deterministic gateways that inspect, validate, and circuit-break autonomous agent actions before execution.</li>
 <li class="stop"><strong>Towards Telemetry Beyond the Black Box:</strong> Fusing runtime provenance checks with targeted latent verification to prevent model self-reporting drift.</li>
 </ul>
+<p class="mcml-agnostic"><strong>Industry-agnostic by design.</strong> The four cards describe any AI system in any industry. Cross-sector frameworks (NIST AI RMF, EU AI Act) are mapped today; sector rules such as HIPAA, FDA SaMD and banking model-risk guidance are designed to plug in as optional profiles, so one card serves every regime without forking the standard.</p>
 </div>
 
 ---
