@@ -1,12 +1,22 @@
 # Model Connect Markup Language (MCML)
 
-**An open, machine-readable standard for AI governance documentation**
+**An open, machine-readable standard for AI safety & governance documentation**
 
 [![Spec: CC BY 4.0](https://img.shields.io/badge/spec-CC%20BY%204.0-lightgrey.svg)](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/LICENSE-SPEC) [![Code: GPL-3.0](https://img.shields.io/badge/code-GPL--3.0-blue.svg)](https://github.com/PLEYVERSE-AI/mcml-standard/blob/main/LICENSE)
 [![Specification](https://img.shields.io/badge/spec-v1.1%20draft-blue)](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/schema/v1.1/)
 [![Status](https://img.shields.io/badge/status-draft-orange)]()
 
-> **A unified standard for AI governance documentation — making safety and compliance claims checkable, not just stated.**
+> **A unified standard for AI safety & governance documentation — making safety and compliance claims checkable.**
+
+<div class="mcml-mission">
+<h2 class="mcml-mission-title">Governed Compute. Enforceable Safety.</h2>
+<p class="mcml-mission-sub">“Bridging machine-readable governance documentation with zero-trust runtime policy enforcement.”</p>
+<ul class="mcml-stoplight">
+<li class="go"><strong>Machine-Readable Traceability:</strong> Standardized schemas that translate static regulations into verifiable system boundaries.</li>
+<li class="caution"><strong>Zero-Trust Tool Interception:</strong> Deterministic gateways that inspect, validate, and circuit-break autonomous agent actions before execution.</li>
+<li class="stop"><strong>Towards Telemetry Beyond the Black Box:</strong> Fusing runtime provenance checks with targeted latent verification to prevent model self-reporting drift.</li>
+</ul>
+</div>
 
 ---
 
