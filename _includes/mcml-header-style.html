@@ -27,5 +27,14 @@
     .mcml-nav::-webkit-scrollbar { display: none; }
     .mcml-nav a.mcml-gh { margin-left: auto; }
   }
+  .mcml-mission { margin: 28px 0 8px; padding: 22px 24px; border: 1px solid #e3e8ee; border-radius: 12px; background: #f8fafc; }
+  .mcml-mission h2.mcml-mission-title { margin: 0 0 6px; padding: 0; border: 0; font-size: 26px; letter-spacing: -0.01em; color: #17202b; }
+  .mcml-mission-sub { margin: 0 0 16px; color: #3d4855; font-style: italic; }
+  ul.mcml-stoplight { list-style: none; padding-left: 0; margin: 0; }
+  ul.mcml-stoplight li { position: relative; padding-left: 30px; margin: 10px 0; }
+  ul.mcml-stoplight li::before { content: ""; position: absolute; left: 4px; top: 0.35em; width: 14px; height: 14px; border-radius: 50%; }
+  ul.mcml-stoplight li.go::before { background: #1f9d55; box-shadow: 0 0 0 3px rgba(31,157,85,.18); }
+  ul.mcml-stoplight li.caution::before { background: #f0a500; box-shadow: 0 0 0 3px rgba(240,165,0,.20); }
+  ul.mcml-stoplight li.stop::before { background: #d93025; box-shadow: 0 0 0 3px rgba(217,48,37,.18); }
   @media (prefers-reduced-motion: reduce) { .mcml-nav a { transition: none; } }
 </style>
