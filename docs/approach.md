@@ -65,6 +65,23 @@ Every policy decision, approval, intervention and tool execution produces a reco
 
 ---
 
+## Defense in depth
+
+No single control secures an autonomous agent. Prompt filters can be bypassed through indirect injection. Behavioral evaluations can miss latent deception and evaluation awareness. Inspecting weights is too slow and noisy to be the only gate. Safety comes from layers that do not depend on the AI being right.
+
+A November 2026 survey of the field, *Understanding AI from the Inside: The State of Mechanistic Interpretability for AI Safety* (Barez, Bengio, Biderman et al., [arXiv:2611.08438](https://arxiv.org/abs/2611.08438)), reaches the same conclusion for interpretability: it is one component of a layered safety strategy, alongside behavioral evaluation and other safeguards, not a standalone guarantee. MCML is built that way:
+
+| Layer | Where it lives in MCML | Status |
+| --- | --- | --- |
+| Behavioral evaluation | Model Card evaluation thresholds; `pre-deploy-check` blocks deployment when evaluations miss them | Available |
+| Runtime enforcement | Gateway: tool and argument checks, human approval, call limits, provenance attestation, kill switch | Prototype |
+| Interpretability signals | Reserved `intrinsic_telemetry` field and `SignalProvider` hook; only validated signals may enforce | Designed for, not used |
+| Accountability across every layer | Signed tool receipts, hash-chained ledger, reconciliation to detect bypass | Prototype |
+
+**Deterministic enforcement today. White-box signals tomorrow. Accountable AI throughout.** When interpretability signals mature, they are added as another layer. They never replace the others.
+
+---
+
 ## When we would turn on intrinsic signals
 
 We would let an internal signal drive enforcement only when all of these hold:
