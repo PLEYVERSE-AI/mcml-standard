@@ -43,7 +43,7 @@ MCML closes that gap in two steps:
 
 The [prototype](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/gateway) passes seven scenarios, including **gateway bypass**, **model provenance injection** and **adversarial payload injection**, in a synthetic clinical workflow, and the tests run on every commit. It has not been tested in production. We publish its limits too: it enforces declared limits, so an action the card permits can still cause harm.
 
-### **[→ Read the MCML Runtime Safety specification](https://mcml-standard.org/docs/runtime-safety.html)**
+### **[→ Read the MCML AI Safety specification](https://mcml-standard.org/docs/runtime-safety.html)**
 
 ---
 
@@ -706,7 +706,7 @@ agentic_governance_card:
 - `escalation_rules`: structured conditions (enables automated routing)
 - `kill_switch.trigger_conditions`: quantitative thresholds (enables automatic shutdown)
 - `enforcement`: how rules are applied at runtime (enables verification)
-- Runtime safety extension (draft): `card_signature`, `enforcement.gateway_isolation`, per-tool `argument_schema`, structured kill-switch triggers and actions, `provenance_verification`, `adversarial_defenses`. See the [Runtime Safety specification](https://mcml-standard.org/docs/runtime-safety.html).
+- Runtime safety extension (draft): `card_signature`, `enforcement.gateway_isolation`, per-tool `argument_schema`, structured kill-switch triggers and actions, `provenance_verification`, `adversarial_defenses`. See the [AI Safety specification](https://mcml-standard.org/docs/runtime-safety.html).
 
 ### How the Four Card Types Relate
 
@@ -933,7 +933,7 @@ analysis = IncidentInvestigator().analyze_incident(
 
 ### 5. Runtime Enforcement and Kill Switch for Agents (prototype)
 
-A gateway outside the agent's runtime enforces the signed Agentic Governance Card on every MCP tool call: it holds tool credentials, runs an out-of-band kill switch, checks model attestation, validates tool arguments, and links each decision to the tool's own receipt. See the **[MCML Runtime Safety specification](https://mcml-standard.org/docs/runtime-safety.html)** for the architecture, card fields, six-scenario threat model and known limits.
+A gateway outside the agent's runtime enforces the signed Agentic Governance Card on every MCP tool call: it holds tool credentials, runs an out-of-band kill switch, checks model attestation, validates tool arguments, and links each decision to the tool's own receipt. See the **[MCML AI Safety specification](https://mcml-standard.org/docs/runtime-safety.html)** for the architecture, card fields, six-scenario threat model and known limits.
 
 ---
 

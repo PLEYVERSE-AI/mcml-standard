@@ -1,6 +1,6 @@
 # MCML Enforcement Gateway (prototype)
 
-A reference prototype of the runtime layer described in the [MCML Runtime Safety specification](https://mcml-standard.org/docs/runtime-safety.html). It enforces a signed **Agentic Governance Card** on every MCP tool call, from outside the agent's runtime, and records linked, tamper-evident evidence.
+A reference prototype of the runtime layer described in the [MCML AI Safety specification](https://mcml-standard.org/docs/runtime-safety.html). It enforces a signed **Agentic Governance Card** on every MCP tool call, from outside the agent's runtime, and records linked, tamper-evident evidence.
 
 > **Status: prototype.** Tested in a synthetic clinical environment (see [RESULTS.md](RESULTS.md)). Not for production use.
 

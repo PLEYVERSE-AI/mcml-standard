@@ -14,9 +14,8 @@
       </span>
     </a>
     <nav class="mcml-nav" aria-label="Site">
-      <a href="{{ "/" | relative_url }}" {% if u == "/" or u == "/index.html" %}aria-current="page"{% endif %}>Standard</a>
+      <a href="{{ "/docs/runtime-safety.html" | relative_url }}" {% if u contains "runtime-safety" %}aria-current="page"{% endif %}>AI Safety</a>
       <a href="{{ "/docs/approach.html" | relative_url }}" {% if u contains "approach" %}aria-current="page"{% endif %}>Approach</a>
-      <a href="{{ "/docs/runtime-safety.html" | relative_url }}" {% if u contains "runtime-safety" %}aria-current="page"{% endif %}>Runtime Safety</a>
       <a href="{{ "/gateway/" | relative_url }}" {% if u == "/gateway/" %}aria-current="page"{% endif %}>Gateway MVP</a>
       <a href="{{ "/gateway/RESULTS.html" | relative_url }}" {% if u contains "RESULTS" %}aria-current="page"{% endif %}>Results</a>
       <a href="{{ "/docs/use-cases.html" | relative_url }}" {% if u contains "use-cases" %}aria-current="page"{% endif %}>Use Cases</a>

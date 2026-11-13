@@ -98,4 +98,4 @@ We would let an internal signal drive enforcement only when all of these hold:
 - Probe-based detection of deception or hidden goals is an open research question, not a solved control.
 - Extrinsic enforcement constrains what an agent can do, not what it is trying to do.
 
-[Runtime Safety specification](https://mcml-standard.org/docs/runtime-safety.html) · [Use cases](https://mcml-standard.org/docs/use-cases.html) · [Gateway source](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/gateway)
+[AI Safety specification](https://mcml-standard.org/docs/runtime-safety.html) · [Use cases](https://mcml-standard.org/docs/use-cases.html) · [Gateway source](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/gateway)
