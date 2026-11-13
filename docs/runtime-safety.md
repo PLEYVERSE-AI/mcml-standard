@@ -89,6 +89,23 @@ MCP standardizes how agents connect to tools and authorize against them. It carr
 
 Use case M will test this side by side; see [Use cases](https://mcml-standard.org/docs/use-cases.html).
 
+## MCML as an AI control layer
+
+**AI control** is a frontier-safety research agenda that asks a sharper question than "is the model aligned?": *can we deploy a model safely even if it is misaligned and actively trying to get around our safety measures?* The term comes from Redwood Research's [AI Control: Improving Safety Despite Intentional Subversion](https://arxiv.org/abs/2312.06942) (Greenblatt, Shlegeris, Sachan and Roger, ICML 2024), which treats the powerful model as **untrusted** and evaluates safety protocols against a red team that plays the model's worst case.
+
+MCML's runtime design starts from the same premise. It does not assume the agent's model is aligned, honest about its reasons, or uncompromised.
+
+| AI control principle | How MCML implements it | Status |
+| --- | --- | --- |
+| Treat the model as untrusted | The agent runtime is outside the trust boundary; enforcement never depends on what the model says about itself | Prototype |
+| Restrict what it can do, not just what it is told | The gateway holds the tool credentials and allows only the tools, arguments, approvals and limits in the signed Agentic Governance Card | Prototype |
+| Shut down without the model's cooperation | Out-of-band kill switch: the gateway revokes its own credentials and drops sessions | Prototype |
+| Detect a swapped or compromised model | The serving host's attested weight hash must match the Model Card's approved list, or the kill switch fires | Prototype (simulated attestation) |
+| Keep an evidence trail an attacker cannot quietly edit | Signed tool receipts and a hash-chained ledger; reconciliation flags calls that went around the gateway | Prototype |
+| Test against adversarial behavior | Scripted attack scenarios: gateway bypass, payload injection, model swap, acting on a withdrawn approval, evidence tampering. These are fixed scenarios, not an adaptive red team | 7 of 7 pass, synthetic ([results](https://mcml-standard.org/gateway/RESULTS.html)) |
+
+**What MCML does not do yet.** The control research also studies *protocols* that use other models to watch the untrusted one: trusted monitoring by a weaker model, trusted editing, and untrusted monitoring with collusion safeguards. MCML does not implement those today. Its role is the layer such protocols need underneath them: a deterministic enforcement point, a declared policy and a tamper-evident record. A monitor's verdict could feed the gateway's existing block, escalate and kill-switch actions, in the same way the reserved interpretability interface is designed to (see [Our approach](https://mcml-standard.org/docs/approach.html)).
+
 ## Kill switch and targeted containment
 
 Not every problem should stop everything. MCML has two responses, both enforced by the gateway without the agent's participation:
