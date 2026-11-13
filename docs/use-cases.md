@@ -40,7 +40,7 @@ A clinical alert agent may page a rapid response team only after a charge nurse 
 | Payload injection | Extra recipient, malformed ID, forged credential | Blocked as security events |
 | Evidence integrity | Log record edited; card altered after signing | Edit detected; altered card refused |
 
-[Full results](https://mcml-standard.org/gateway/RESULTS.html) · [Runtime Safety specification](https://mcml-standard.org/docs/runtime-safety.html) · [Run it yourself](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/gateway)
+[Full results](https://mcml-standard.org/gateway/RESULTS.html) · [AI Safety specification](https://mcml-standard.org/docs/runtime-safety.html) · [Run it yourself](https://github.com/PLEYVERSE-AI/mcml-standard/tree/main/gateway)
 
 **Limits:** synthetic environment; tool isolation and model attestation are simulated; not yet tested in production.
 

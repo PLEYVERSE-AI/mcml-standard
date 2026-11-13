@@ -1,8 +1,8 @@
 ---
-title: "MCML Runtime Safety: Enforced Controls and a Kill Switch for AI Agents"
+title: "MCML AI Safety: Enforced Controls and a Kill Switch for AI Agents"
 ---
 
-# MCML Runtime Safety
+# MCML AI Safety
 
 ## Enforced controls and a kill switch for AI agents
 
